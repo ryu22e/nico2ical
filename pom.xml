@@ -120,8 +120,22 @@
       <type>jar</type>
       <scope>compile</scope>
     </dependency>
+    <!-- mavenレポジトリがないので、手動でローカルリポジトリにインストールが必要。 -->
+    <dependency>
+      <groupId>net.reduls.igo</groupId>
+      <artifactId>igo</artifactId>
+      <version>0.4.2</version>
+      <scope>compile</scope>
+    </dependency>
     <!-- <dependency> <groupId>com.google.appengine</groupId> <artifactId>appengine-testing</artifactId> 
       <version>${appengine.version}</version> <scope>test</scope> </dependency> -->
+    <dependency>
+    	<groupId>xerces</groupId>
+    	<artifactId>xerces</artifactId>
+    	<version>2.4.0</version>
+    	<type>jar</type>
+    	<scope>compile</scope>
+    </dependency>
   </dependencies>
   <build>
     <finalName>slim3-maven</finalName>
