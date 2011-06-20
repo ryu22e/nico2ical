@@ -141,9 +141,10 @@ public final class NicoliveService {
                 nicoliveIndex.setKeyword(keyword);
                 nicoliveIndex.setNicoliveKeys(new ArrayList<Key>());
             }
-            nicoliveIndex.getNicoliveKeys().add(nicolive.getKey());
-
-            nicoliveIndexes.add(nicoliveIndex);
+            if (!nicoliveIndex.getNicoliveKeys().contains(nicolive.getKey())) {
+                nicoliveIndex.getNicoliveKeys().add(nicolive.getKey());
+                nicoliveIndexes.add(nicoliveIndex);
+            }
         }
 
         Datastore.put(nicoliveIndexes);
