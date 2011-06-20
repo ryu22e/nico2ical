@@ -4,6 +4,7 @@
 package org.ryu22e.nico2cal.service;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * {@link CalendarService#getCalendar(CalendarCondition)}の検索条件を格納するクラス。
@@ -19,7 +20,7 @@ public final class CalendarCondition {
     /**
      * 
      */
-    private String keyword;
+    private List<String> keywords;
 
     /**
      * @return the startDate
@@ -36,17 +37,17 @@ public final class CalendarCondition {
     }
 
     /**
-     * @return the keyword
+     * @return the keywords
      */
-    public String getKeyword() {
-        return keyword;
+    public List<String> getKeywords() {
+        return keywords;
     }
 
     /**
-     * @param keyword the keyword to set
+     * @param keywords the keywords to set
      */
-    public void setKeyword(String keyword) {
-        this.keyword = keyword;
+    public void setKeywords(List<String> keywords) {
+        this.keywords = keywords;
     }
 
 }

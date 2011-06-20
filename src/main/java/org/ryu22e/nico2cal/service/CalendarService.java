@@ -2,7 +2,9 @@ package org.ryu22e.nico2cal.service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -19,10 +21,13 @@ import net.fortuna.ical4j.model.property.Url;
 import net.fortuna.ical4j.model.property.Version;
 import net.fortuna.ical4j.model.property.XProperty;
 
+import org.ryu22e.nico2cal.meta.NicoliveIndexMeta;
 import org.ryu22e.nico2cal.meta.NicoliveMeta;
 import org.ryu22e.nico2cal.model.Nicolive;
+import org.ryu22e.nico2cal.model.NicoliveIndex;
 import org.slim3.datastore.Datastore;
 
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Query.SortDirection;
 
 /**
@@ -69,6 +74,7 @@ public final class CalendarService {
         calendar.getProperties().add(new XProperty("X-WR-CALNAME", CALNAME));
 
         NicoliveMeta n = NicoliveMeta.get();
+
         List<Nicolive> nicolives =
                 Datastore
                     .query(n)
@@ -77,24 +83,44 @@ public final class CalendarService {
                     .sort(n.openTime.getName(), SortDirection.ASCENDING)
                     .asList();
 
-        // TODO キーワードによる全文検索機能を実装する。
-
-        for (Nicolive nicolive : nicolives) {
-            PropertyList properties = new PropertyList();
-            properties.add(new Summary(nicolive.getTitle()));
-            properties
-                .add(new Description(nicolive.getDescription().getValue()));
-            properties.add(new DtStart(new DateTime(nicolive.getOpenTime())));
-            properties.add(new DtEnd(new DateTime(nicolive.getOpenTime())));
-            try {
-                URI uri = new URI(nicolive.getLink().getValue());
-                properties.add(new Url(uri));
-            } catch (URISyntaxException e) {
-                LOGGER.log(Level.WARNING, e.getMessage());
+        if (0 < nicolives.size()) {
+            Set<Key> keywordKeys = null;
+            if (condition.getKeywords() != null
+                    && 0 < condition.getKeywords().size()) {
+                keywordKeys = new HashSet<Key>();
+                NicoliveIndexMeta ni = NicoliveIndexMeta.get();
+                List<NicoliveIndex> indexes =
+                        Datastore
+                            .query(ni)
+                            .filter(ni.keyword.in(condition.getKeywords()))
+                            .asList();
+                for (NicoliveIndex nicoliveIndex : indexes) {
+                    keywordKeys.addAll(nicoliveIndex.getNicoliveKeys());
+                }
             }
+            for (Nicolive nicolive : nicolives) {
+                if (keywordKeys == null
+                        || keywordKeys.contains(nicolive.getKey())) {
+                    PropertyList properties = new PropertyList();
+                    properties.add(new Summary(nicolive.getTitle()));
+                    properties.add(new Description(nicolive
+                        .getDescription()
+                        .getValue()));
+                    properties.add(new DtStart(new DateTime(nicolive
+                        .getOpenTime())));
+                    properties.add(new DtEnd(new DateTime(nicolive
+                        .getOpenTime())));
+                    try {
+                        URI uri = new URI(nicolive.getLink().getValue());
+                        properties.add(new Url(uri));
+                    } catch (URISyntaxException e) {
+                        LOGGER.log(Level.WARNING, e.getMessage());
+                    }
 
-            VEvent event = new VEvent(properties);
-            calendar.getComponents().add(event);
+                    VEvent event = new VEvent(properties);
+                    calendar.getComponents().add(event);
+                }
+            }
         }
 
         return calendar;

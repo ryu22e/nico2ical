@@ -3,6 +3,7 @@ package org.ryu22e.nico2cal.service;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -13,6 +14,7 @@ import net.fortuna.ical4j.model.component.VEvent;
 import org.joda.time.DateTime;
 import org.junit.Test;
 import org.ryu22e.nico2cal.model.Nicolive;
+import org.ryu22e.nico2cal.model.NicoliveIndex;
 import org.slim3.datastore.Datastore;
 import org.slim3.tester.AppEngineTestCase;
 import org.slim3.util.DateUtil;
@@ -52,7 +54,22 @@ public final class CalendarServiceTest extends AppEngineTestCase {
             nicolinve.setLink(new Link("http://ryu22e.org/" + i));
             Key key = Datastore.put(nicolinve);
             testDataKeys.add(key);
+            NicoliveIndex nicoliveIndex1 = new NicoliveIndex();
+            nicoliveIndex1.setKeyword("テスト");
+            nicoliveIndex1.setNicoliveKeys(Arrays.asList(key));
+            NicoliveIndex nicoliveIndex2 = new NicoliveIndex();
+            nicoliveIndex2.setKeyword("説明文");
+            nicoliveIndex2.setNicoliveKeys(Arrays.asList(key));
+            testDataKeys.addAll(Datastore.put(nicoliveIndex1, nicoliveIndex2));
         }
+
+        Nicolive nicolive = new Nicolive();
+        nicolive.setTitle("検索対象外のデータ");
+        nicolive.setDescription(new Text("検索対象外のデータ"));
+        DateTime datetime = new DateTime(2011, 1, 1, 0, 0, 0, 0);
+        nicolive.setOpenTime(datetime.toDate());
+        nicolive.setLink(new Link("http://ryu22e.org/"));
+        testDataKeys.add(Datastore.put(nicolive));
     }
 
     /*
@@ -101,6 +118,7 @@ public final class CalendarServiceTest extends AppEngineTestCase {
         DateTime startDate = new DateTime(2011, 1, 1, 0, 0, 0, 0);
         startDate = startDate.minusDays(7);
         condition.setStartDate(startDate.toDate());
+        condition.setKeywords(Arrays.asList("テスト"));
 
         Calendar calendar = service.getCalendar(condition);
         assertThat(calendar, not(nullValue()));
