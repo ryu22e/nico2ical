@@ -3,6 +3,7 @@ package org.ryu22e.nico2cal.service;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -11,8 +12,10 @@ import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.junit.Test;
+import org.ryu22e.nico2cal.meta.NicoliveIndexMeta;
 import org.ryu22e.nico2cal.meta.NicoliveMeta;
 import org.ryu22e.nico2cal.model.Nicolive;
+import org.ryu22e.nico2cal.model.NicoliveIndex;
 import org.ryu22e.nico2cal.rome.module.NicoliveModule;
 import org.slim3.datastore.Datastore;
 import org.slim3.tester.AppEngineTestCase;
@@ -197,5 +200,89 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
                     .filter(n.title.equal("NicoliveModuleなしデータ"))
                     .count();
         assertThat(count, is(0));
+    }
+
+    /**
+     * @throws Exception
+     */
+    @Test(expected = NullPointerException.class)
+    public void 全文検索用インデックスを作成する_パラメータがnull() throws Exception {
+        assertThat(service, is(notNullValue()));
+
+        service.createIndex(null);
+    }
+
+    @Test
+    public void 全文検索用インデックスを作成する() throws Exception {
+        assertThat(service, is(notNullValue()));
+
+        // テストデータを作成する。
+        DateTime datetime = new DateTime();
+        datetime = datetime.minusDays(3);
+        Nicolive nicolinve1 = new Nicolive();
+        nicolinve1.setTitle("テスト");
+        nicolinve1.setDescription(new Text("本日は晴天なり。"));
+        nicolinve1.setOpenTime(datetime.toDate());
+        nicolinve1.setStartTime(datetime.plusMinutes(10).toDate());
+        nicolinve1.setLink(new Link("http://ryu22e.org/1"));
+        Key key1 = Datastore.put(nicolinve1);
+        testDataKeys.add(key1);
+        Nicolive nicolinve2 = new Nicolive();
+        nicolinve2.setTitle("テスト");
+        nicolinve2.setDescription(new Text("本日は晴天なり。"));
+        nicolinve2.setOpenTime(datetime.toDate());
+        nicolinve2.setStartTime(datetime.plusMinutes(10).toDate());
+        nicolinve2.setLink(new Link("http://ryu22e.org/2"));
+        Key key2 = Datastore.put(nicolinve2);
+        testDataKeys.add(key2);
+        NicoliveIndex nicoliveIndex = new NicoliveIndex();
+        nicoliveIndex.setKeyword("テスト");
+        nicoliveIndex.setNicoliveKeys(new ArrayList<Key>(Arrays.asList(key2)));
+        testDataKeys.add(Datastore.put(nicoliveIndex));
+
+        service.createIndex(nicolinve1);
+
+        // TitleとDescriptionが文節ごとに分解されて、各文節とNicoliveのKeyがエンティティに登録される。
+        NicoliveIndexMeta n = NicoliveIndexMeta.get();
+        testDataKeys.addAll(Datastore
+            .query(n)
+            .filter(n.nicoliveKeys.in(key1))
+            .asKeyList());
+        assertThat(
+            Datastore
+                .query(n)
+                .filter(n.keyword.equal("テスト"), n.nicoliveKeys.in(key1))
+                .count(),
+            is(1));
+        assertThat(
+            Datastore
+                .query(n)
+                .filter(n.keyword.equal("本日"), n.nicoliveKeys.in(key1))
+                .count(),
+            is(1));
+        assertThat(
+            Datastore
+                .query(n)
+                .filter(n.keyword.equal("は"), n.nicoliveKeys.in(key1))
+                .count(),
+            is(1));
+        assertThat(
+            Datastore
+                .query(n)
+                .filter(n.keyword.equal("晴天"), n.nicoliveKeys.in(key1))
+                .count(),
+            is(1));
+        assertThat(
+            Datastore
+                .query(n)
+                .filter(n.keyword.equal("なり"), n.nicoliveKeys.in(key1))
+                .count(),
+            is(1));
+        assertThat(
+            Datastore
+                .query(n)
+                .filter(n.keyword.equal("。"), n.nicoliveKeys.in(key1))
+                .count(),
+            is(1));
     }
 }

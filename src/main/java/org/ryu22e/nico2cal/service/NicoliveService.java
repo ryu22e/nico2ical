@@ -1,15 +1,25 @@
 package org.ryu22e.nico2cal.service;
 
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Set;
+
+import net.reduls.igo.Morpheme;
+import net.reduls.igo.Tagger;
 
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
+import org.ryu22e.nico2cal.meta.NicoliveIndexMeta;
 import org.ryu22e.nico2cal.meta.NicoliveMeta;
 import org.ryu22e.nico2cal.model.Nicolive;
+import org.ryu22e.nico2cal.model.NicoliveIndex;
 import org.ryu22e.nico2cal.rome.module.NicoliveModule;
 import org.slim3.datastore.Datastore;
 
+import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Link;
 import com.google.appengine.api.datastore.Text;
 import com.sun.syndication.feed.synd.SyndEntry;
@@ -17,6 +27,10 @@ import com.sun.syndication.feed.synd.SyndFeed;
 
 /**
  * {@link Nicolive}を操作するサービスクラス。
+ * @author ryu22e
+ *
+ */
+/**
  * @author ryu22e
  *
  */
@@ -85,4 +99,52 @@ public final class NicoliveService {
         Datastore.put(nicolives);
     }
 
+    /**
+     * {@link Nicolive}の全文検索用インデックスを作成する。
+     * @param nicolive インデックスを作成するNicoliveエンティティ。
+     * @throws IOException Igoの辞書ファイル読み込みに失敗した場合。
+     * @throws NullPointerException パラメータがnullの場合。
+     */
+    public void createIndex(Nicolive nicolive) throws IOException {
+        if (nicolive == null) {
+            throw new NullPointerException("nicolive is null.");
+        }
+
+        // ここにインデックスを作る対象のキーワードを入れる。
+        Set<String> keywords = new HashSet<String>();
+
+        Tagger tagger = new Tagger("ipadic/");
+        // Titleを文節ごとに分解する。
+        List<Morpheme> titleMorphemes = tagger.parse(nicolive.getTitle());
+        for (Morpheme morpheme : titleMorphemes) {
+            keywords.add(morpheme.surface);
+        }
+
+        // Descriptionを文節ごとに分解する。
+        List<Morpheme> descriptionMorphemes =
+                tagger.parse(nicolive.getDescription().getValue());
+        for (Morpheme morpheme : descriptionMorphemes) {
+            keywords.add(morpheme.surface);
+        }
+
+        NicoliveIndexMeta n = NicoliveIndexMeta.get();
+        List<NicoliveIndex> nicoliveIndexes = new LinkedList<NicoliveIndex>();
+        for (String keyword : keywords) {
+            NicoliveIndex nicoliveIndex =
+                    Datastore
+                        .query(n)
+                        .filter(n.keyword.equal(keyword))
+                        .asSingle();
+            if (nicoliveIndex == null) {
+                nicoliveIndex = new NicoliveIndex();
+                nicoliveIndex.setKeyword(keyword);
+                nicoliveIndex.setNicoliveKeys(new ArrayList<Key>());
+            }
+            nicoliveIndex.getNicoliveKeys().add(nicolive.getKey());
+
+            nicoliveIndexes.add(nicoliveIndex);
+        }
+
+        Datastore.put(nicoliveIndexes);
+    }
 }
