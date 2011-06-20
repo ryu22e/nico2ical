@@ -172,4 +172,12 @@ public final class NicoliveService {
             .sort(n.openTime.getName(), SortDirection.ASCENDING)
             .asList();
     }
+
+    /**
+     * {@link NicoliveIndex}を全て削除する。
+     */
+    public void deleteAllIndex() {
+        NicoliveIndexMeta ni = NicoliveIndexMeta.get();
+        Datastore.delete(Datastore.query(ni).asKeyList());
+    }
 }

@@ -353,4 +353,22 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
                 .count(),
             is(1));
     }
+
+    /**
+     * @throws Exception
+     */
+    @Test
+    public void 全文検索用インデックスを全部消す() throws Exception {
+        assertThat(service, is(notNullValue()));
+
+        // テストデータを登録する。
+        NicoliveIndex index = new NicoliveIndex();
+        index.setKeyword("テスト");
+        Datastore.put(index);
+
+        service.deleteAllIndex();
+
+        NicoliveIndexMeta ni = NicoliveIndexMeta.get();
+        assertThat(Datastore.query(ni).count(), is(0));
+    }
 }
