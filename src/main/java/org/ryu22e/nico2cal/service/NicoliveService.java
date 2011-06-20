@@ -21,6 +21,7 @@ import org.slim3.datastore.Datastore;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Link;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.appengine.api.datastore.Text;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
@@ -146,5 +147,28 @@ public final class NicoliveService {
         }
 
         Datastore.put(nicoliveIndexes);
+    }
+
+    /**
+     * 登録されている{@link Nicolive}を取得する。
+     * @param condition 検索条件
+     * @return {@link Nicolive}のリスト
+     * @throws NullPointerException パラメータがnullの場合。
+     * @throws IllegalArgumentException 検索条件にStartDateが指定されていない場合。
+     */
+    public List<Nicolive> find(NicoliveCondition condition) {
+        if (condition == null) {
+            throw new NullPointerException("condition is null.");
+        }
+        if (condition.getStartDate() == null) {
+            throw new IllegalArgumentException("StartDate is null.");
+        }
+
+        NicoliveMeta n = NicoliveMeta.get();
+        return Datastore
+            .query(n)
+            .filter(n.openTime.greaterThanOrEqual(condition.getStartDate()))
+            .sort(n.openTime.getName(), SortDirection.ASCENDING)
+            .asList();
     }
 }
