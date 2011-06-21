@@ -1,6 +1,7 @@
 package org.ryu22e.nico2cal.controller;
 
 import java.util.List;
+import java.util.logging.Logger;
 
 import org.joda.time.DateTime;
 import org.ryu22e.nico2cal.model.Nicolive;
@@ -20,6 +21,12 @@ import com.google.appengine.api.taskqueue.TaskOptions.Method;
  *
  */
 public final class GenerateFullTextSearchIndexController extends Controller {
+
+    /**
+     * 
+     */
+    private static final Logger LOGGER = Logger
+        .getLogger(GenerateFullTextSearchIndexController.class.getName());
 
     /**
      * 
@@ -62,6 +69,8 @@ public final class GenerateFullTextSearchIndexController extends Controller {
      */
     @Override
     public Navigation run() throws Exception {
+        LOGGER.info("BEGIN: " + this.getClass().getName());
+
         // 一旦すべてのNicoliveIndexを消す。
         nicoliveService.deleteAllIndex();
 
@@ -84,6 +93,8 @@ public final class GenerateFullTextSearchIndexController extends Controller {
                 fromIndex = toIndex + 1;
             }
         }
+
+        LOGGER.info("END: " + this.getClass().getName());
 
         return null;
     }
