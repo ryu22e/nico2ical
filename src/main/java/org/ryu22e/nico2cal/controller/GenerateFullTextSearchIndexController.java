@@ -62,13 +62,17 @@ public final class GenerateFullTextSearchIndexController extends Controller {
      */
     @Override
     public Navigation run() throws Exception {
-        DateTime datetime = new DateTime();
+        // 一旦すべてのNicoliveIndexを消す。
+        nicoliveService.deleteAllIndex();
 
+        // 31前から先のNicoliveデータに対するNicoliveIndexを作成する。
+        DateTime datetime = new DateTime();
         NicoliveCondition condition = new NicoliveCondition();
         condition.setStartDate(datetime.minusDays(MINUS_DAYS).toDate());
         List<Nicolive> nicolives = nicoliveService.findList(condition);
         if (0 < nicolives.size()) {
             int fromIndex = 0;
+            // 全てのデータを一つのTaskQueueに渡すと時間がかかりすぎるので、幾つかに分割する。
             while (fromIndex < nicolives.size()) {
                 int toIndex = fromIndex + SUBLIST_SIZE;
                 if (toIndex < nicolives.size()) {
