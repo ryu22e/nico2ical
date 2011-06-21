@@ -20,6 +20,7 @@ import org.ryu22e.nico2cal.rome.module.NicoliveModule;
 import org.slim3.datastore.Datastore;
 import org.slim3.tester.AppEngineTestCase;
 
+import com.google.appengine.api.NamespaceManager;
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Link;
 import com.google.appengine.api.datastore.Text;
@@ -46,6 +47,8 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+
+        NamespaceManager.set("test");
 
         // テストデータを登録する。
         testDataKeys.clear();

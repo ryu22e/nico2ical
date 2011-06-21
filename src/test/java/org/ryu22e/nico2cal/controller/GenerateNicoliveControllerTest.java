@@ -9,6 +9,8 @@ import org.ryu22e.nico2cal.meta.NicoliveMeta;
 import org.slim3.datastore.Datastore;
 import org.slim3.tester.ControllerTestCase;
 
+import com.google.appengine.api.NamespaceManager;
+
 /**
  * @author ryu22e
  *
@@ -31,6 +33,8 @@ public final class GenerateNicoliveControllerTest extends ControllerTestCase {
     @Override
     public void setUp() throws Exception {
         super.setUp();
+
+        NamespaceManager.set("test");
 
         clearDataStore();
     }

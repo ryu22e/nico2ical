@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.ryu22e.nico2cal.rome.module.NicoliveModule;
 import org.slim3.tester.AppEngineTestCase;
 
+import com.google.appengine.api.NamespaceManager;
 import com.sun.syndication.feed.synd.SyndEntry;
 import com.sun.syndication.feed.synd.SyndFeed;
 
@@ -22,6 +23,24 @@ public final class NicoliveRssServiceTest extends AppEngineTestCase {
      * 
      */
     private NicoliveRssService service = new NicoliveRssService();
+
+    /*
+     * (non-Javadoc) {@inheritDoc}
+     */
+    @Override
+    public void setUp() throws Exception {
+        super.setUp();
+
+        NamespaceManager.set("test");
+    }
+
+    /*
+     * (non-Javadoc) {@inheritDoc}
+     */
+    @Override
+    public void tearDown() throws Exception {
+        super.tearDown();
+    }
 
     /**
      * @throws Exception
