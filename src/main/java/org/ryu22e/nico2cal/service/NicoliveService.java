@@ -38,6 +38,11 @@ import com.sun.syndication.feed.synd.SyndFeed;
 public final class NicoliveService {
 
     /**
+     * 
+     */
+    private static final int SLEEP_TIME = 1000;
+
+    /**
      * RSSフィードをデータストアに登録する。
      * @param feed RSSフィード
      * @throws NullPointerException パラメータがnullの場合。
@@ -104,9 +109,11 @@ public final class NicoliveService {
      * {@link Nicolive}の全文検索用インデックスを作成する。
      * @param nicolive インデックスを作成するNicoliveエンティティ。
      * @throws IOException Igoの辞書ファイル読み込みに失敗した場合。
+     * @throws InterruptedException 
      * @throws NullPointerException パラメータがnullの場合。
      */
-    public void createIndex(Nicolive nicolive) throws IOException {
+    public void createIndex(Nicolive nicolive) throws IOException,
+            InterruptedException {
         if (nicolive == null) {
             throw new NullPointerException("nicolive is null.");
         }
@@ -129,7 +136,6 @@ public final class NicoliveService {
         }
 
         NicoliveIndexMeta n = NicoliveIndexMeta.get();
-        List<NicoliveIndex> nicoliveIndexes = new LinkedList<NicoliveIndex>();
         for (String keyword : keywords) {
             NicoliveIndex nicoliveIndex =
                     Datastore
@@ -138,26 +144,40 @@ public final class NicoliveService {
                         .asSingle();
             if (nicoliveIndex == null) {
                 nicoliveIndex = new NicoliveIndex();
+                nicoliveIndex.setKey(Datastore.allocateId(n));
                 nicoliveIndex.setKeyword(keyword);
                 nicoliveIndex.setNicoliveKeys(new ArrayList<Key>());
             }
             if (!nicoliveIndex.getNicoliveKeys().contains(nicolive.getKey())) {
-                nicoliveIndex.getNicoliveKeys().add(nicolive.getKey());
-                nicoliveIndexes.add(nicoliveIndex);
+                String keyString =
+                        Datastore.keyToString(nicoliveIndex.getKey());
+                // 同じエンティティを複数のTaskQueueで同時に更新できないようにする。
+                while (!Datastore.putUniqueValue(
+                    "NicoliveService#createIndex",
+                    keyString)) {
+                    Thread.sleep(SLEEP_TIME);
+                }
+                try {
+                    nicoliveIndex.getNicoliveKeys().add(nicolive.getKey());
+                    Datastore.put(nicoliveIndex);
+                } finally {
+                    Datastore.deleteUniqueValue(
+                        "NicoliveService#createIndex",
+                        keyString);
+                }
             }
         }
 
-        Datastore.put(nicoliveIndexes);
     }
 
     /**
-     * 登録されている{@link Nicolive}を取得する。
+     * 登録されている{@link Nicolive}のListを取得する。
      * @param condition 検索条件
      * @return {@link Nicolive}のリスト
      * @throws NullPointerException パラメータがnullの場合。
      * @throws IllegalArgumentException 検索条件にStartDateが指定されていない場合。
      */
-    public List<Nicolive> find(NicoliveCondition condition) {
+    public List<Nicolive> findList(NicoliveCondition condition) {
         if (condition == null) {
             throw new NullPointerException("condition is null.");
         }
@@ -166,11 +186,35 @@ public final class NicoliveService {
         }
 
         NicoliveMeta n = NicoliveMeta.get();
-        return Datastore
-            .query(n)
-            .filter(n.openTime.greaterThanOrEqual(condition.getStartDate()))
-            .sort(n.openTime.getName(), SortDirection.ASCENDING)
-            .asList();
+        if (condition.getEndDate() == null) {
+            return Datastore
+                .query(n)
+                .filter(n.openTime.greaterThanOrEqual(condition.getStartDate()))
+                .sort(n.openTime.getName(), SortDirection.ASCENDING)
+                .asList();
+        } else {
+            return Datastore
+                .query(n)
+                .filter(
+                    n.openTime.greaterThanOrEqual(condition.getStartDate()),
+                    n.openTime.lessThanOrEqual(condition.getEndDate()))
+                .sort(n.openTime.getName(), SortDirection.ASCENDING)
+                .asList();
+        }
+    }
+
+    /**
+     * 登録されている{@link Nicolive}を取得する。
+     * @param key {@link Nicolive}のキー
+     * @return {@link Nicolive}
+     * @throws NullPointerException パラメータがnullの場合。
+     */
+    public Nicolive find(Key key) {
+        if (key == null) {
+            throw new NullPointerException("key is null.");
+        }
+        NicoliveMeta n = NicoliveMeta.get();
+        return Datastore.getOrNull(n, key);
     }
 
     /**

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<cronentries>
+  <cron>
+    <url>/GenerateNicolive</url>
+    <description>Generate Nicolive</description>
+    <schedule>every 1 hours</schedule>
+    <timezone>Asia/Tokyo</timezone>
+  </cron>
+  <cron>
+    <url>/GenerateFullTextSearchIndexController</url>
+    <description>Generate Full Text Search Index</description>
+    <schedule>every 1 hours</schedule>
+    <timezone>Asia/Tokyo</timezone>
+  </cron>
+</cronentries>

@@ -156,16 +156,13 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
         service.find(null);
     }
 
-    /**
-     * @throws Exception
-     */
-    @Test(expected = IllegalArgumentException.class)
-    public void データストアに登録したRSSデータを取得する_パラメータが不正() throws Exception {
+    @Test
+    public void データストアに登録したRSSデータを取得する_該当するデータが存在しない() throws Exception {
         assertThat(service, is(notNullValue()));
 
-        NicoliveCondition condition = new NicoliveCondition();
-        condition.setStartDate(null);
-        service.find(condition);
+        Key key = Datastore.allocateId(NicoliveMeta.get());
+        Nicolive nicolive = service.find(key);
+        assertThat(nicolive, is(nullValue()));
     }
 
     /**
@@ -175,19 +172,89 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
     public void データストアに登録したRSSデータを取得する_該当するデータが存在する() throws Exception {
         assertThat(service, is(notNullValue()));
 
+        // テストデータを登録する。
+        Nicolive testData = new Nicolive();
+        testData.setTitle("テストデータ");
+        testData.setDescription(new Text("これはテストデータです。"));
+        DateTime openTime = new DateTime();
+        testData.setOpenTime(openTime.toDate());
+        DateTime startTime = openTime.minusMinutes(10);
+        testData.setStartTime(startTime.toDate());
+        testData.setLink(new Link("http://ryu22e.org/"));
+        testData.setType("official");
+        testData.setPassword(true);
+        testData.setPremiumOnly(true);
+
+        Key key = Datastore.put(testData);
+        testDataKeys.add(key);
+
+        Nicolive nicolive = service.find(key);
+        assertThat(nicolive, is(notNullValue()));
+        assertThat(nicolive, is(testData));
+    }
+
+    /**
+     * @throws Exception
+     */
+    @Test(expected = NullPointerException.class)
+    public void データストアに登録したRSSデータListを取得する_パラメータがnull() throws Exception {
+        assertThat(service, is(notNullValue()));
+
+        service.findList(null);
+    }
+
+    /**
+     * @throws Exception
+     */
+    @Test(expected = IllegalArgumentException.class)
+    public void データストアに登録したRSSデータListを取得する_パラメータが不正() throws Exception {
+        assertThat(service, is(notNullValue()));
+
         NicoliveCondition condition = new NicoliveCondition();
-        DateTime datetime = new DateTime(2011, 12, 1, 0, 0, 0, 0);
-        condition.setStartDate(datetime.toDate());
-        List<Nicolive> nicolives = service.find(condition);
-        assertThat(nicolives, is(notNullValue()));
-        assertThat(nicolives.size(), is(0));
+        condition.setStartDate(null);
+        service.findList(condition);
     }
 
     /**
      * @throws Exception
      */
     @Test
-    public void データストアに登録したRSSデータを取得する_該当するデータが存在しない() throws Exception {
+    public void データストアに登録したRSSデータListを取得する_StartDateとEndDateを指定する_該当するデータが存在する()
+            throws Exception {
+        assertThat(service, is(notNullValue()));
+
+        Datastore.delete(testDataKeys);
+        testDataKeys.clear();
+
+        // テストデータを登録する。
+        for (int i = 0; i < 99; i++) {
+            Nicolive nicolinve = new Nicolive();
+            nicolinve.setTitle("テスト" + i);
+            nicolinve.setDescription(new Text("テスト説明文" + i));
+            DateTime datetime = new DateTime(2011, 1, 1, 0, 0, 0, 0);
+            datetime = datetime.minusDays(i);
+            nicolinve.setOpenTime(datetime.toDate());
+            nicolinve.setLink(new Link("http://ryu22e.org/" + i));
+            Key key = Datastore.put(nicolinve);
+            testDataKeys.add(key);
+        }
+
+        NicoliveCondition condition = new NicoliveCondition();
+        DateTime endDate = new DateTime(2010, 12, 31, 0, 0, 0, 0);
+        DateTime startDate = endDate.minusDays(3);
+        condition.setStartDate(startDate.toDate());
+        condition.setEndDate(endDate.toDate());
+        List<Nicolive> nicolives = service.findList(condition);
+        assertThat(nicolives, is(notNullValue()));
+        assertThat(nicolives.size(), is(4));
+
+    }
+
+    /**
+     * @throws Exception
+     */
+    @Test
+    public void データストアに登録したRSSデータListを取得する_該当するデータが存在する() throws Exception {
         assertThat(service, is(notNullValue()));
 
         Datastore.delete(testDataKeys);
@@ -209,9 +276,25 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
         NicoliveCondition condition = new NicoliveCondition();
         DateTime datetime = new DateTime(2010, 12, 1, 0, 0, 0, 0);
         condition.setStartDate(datetime.toDate());
-        List<Nicolive> nicolives = service.find(condition);
+        List<Nicolive> nicolives = service.findList(condition);
         assertThat(nicolives, is(notNullValue()));
         assertThat(nicolives.size(), is(32));
+    }
+
+    /**
+     * @throws Exception
+     */
+    @Test
+    public void データストアに登録したRSSデータListを取得する_StartDateを指定する_該当するデータが存在しない()
+            throws Exception {
+        assertThat(service, is(notNullValue()));
+
+        NicoliveCondition condition = new NicoliveCondition();
+        DateTime datetime = new DateTime(2011, 12, 1, 0, 0, 0, 0);
+        condition.setStartDate(datetime.toDate());
+        List<Nicolive> nicolives = service.findList(condition);
+        assertThat(nicolives, is(notNullValue()));
+        assertThat(nicolives.size(), is(0));
     }
 
     /**
