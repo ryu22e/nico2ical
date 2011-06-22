@@ -8,7 +8,7 @@
   </cron>
   <cron>
     <url>/DeleteOldNicoliveIndex</url>
-    <description>Generate Nicolive</description>
+    <description>Delete Old NicoliveIndex</description>
     <schedule>every day 00:00</schedule>
     <timezone>Asia/Tokyo</timezone>
   </cron>
