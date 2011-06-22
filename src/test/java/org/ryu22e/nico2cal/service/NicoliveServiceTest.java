@@ -3,7 +3,6 @@ package org.ryu22e.nico2cal.service;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -393,7 +392,7 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
         testDataKeys.add(key2);
         NicoliveIndex nicoliveIndex = new NicoliveIndex();
         nicoliveIndex.setKeyword("テスト");
-        nicoliveIndex.setNicoliveKeys(new ArrayList<Key>(Arrays.asList(key2)));
+        nicoliveIndex.setNicoliveKey(key2);
         testDataKeys.add(Datastore.put(nicoliveIndex));
 
         service.createIndex(nicolinve1);
@@ -402,42 +401,42 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
         NicoliveIndexMeta n = NicoliveIndexMeta.get();
         testDataKeys.addAll(Datastore
             .query(n)
-            .filter(n.nicoliveKeys.in(key1))
+            .filter(n.nicoliveKey.equal(key1))
             .asKeyList());
         assertThat(
             Datastore
                 .query(n)
-                .filter(n.keyword.equal("テスト"), n.nicoliveKeys.in(key1))
+                .filter(n.keyword.equal("テスト"), n.nicoliveKey.equal(key1))
                 .count(),
             is(1));
         assertThat(
             Datastore
                 .query(n)
-                .filter(n.keyword.equal("本日"), n.nicoliveKeys.in(key1))
+                .filter(n.keyword.equal("本日"), n.nicoliveKey.equal(key1))
                 .count(),
             is(1));
         assertThat(
             Datastore
                 .query(n)
-                .filter(n.keyword.equal("は"), n.nicoliveKeys.in(key1))
+                .filter(n.keyword.equal("は"), n.nicoliveKey.equal(key1))
                 .count(),
             is(1));
         assertThat(
             Datastore
                 .query(n)
-                .filter(n.keyword.equal("晴天"), n.nicoliveKeys.in(key1))
+                .filter(n.keyword.equal("晴天"), n.nicoliveKey.equal(key1))
                 .count(),
             is(1));
         assertThat(
             Datastore
                 .query(n)
-                .filter(n.keyword.equal("なり"), n.nicoliveKeys.in(key1))
+                .filter(n.keyword.equal("なり"), n.nicoliveKey.equal(key1))
                 .count(),
             is(1));
         assertThat(
             Datastore
                 .query(n)
-                .filter(n.keyword.equal("。"), n.nicoliveKeys.in(key1))
+                .filter(n.keyword.equal("。"), n.nicoliveKey.equal(key1))
                 .count(),
             is(1));
     }

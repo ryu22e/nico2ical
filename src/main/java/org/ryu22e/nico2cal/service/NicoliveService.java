@@ -1,7 +1,6 @@
 package org.ryu22e.nico2cal.service;
 
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -10,6 +9,7 @@ import java.util.Set;
 import net.reduls.igo.Morpheme;
 import net.reduls.igo.Tagger;
 
+import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.ryu22e.nico2cal.meta.NicoliveIndexMeta;
@@ -36,11 +36,6 @@ import com.sun.syndication.feed.synd.SyndFeed;
  *
  */
 public final class NicoliveService {
-
-    /**
-     * 
-     */
-    private static final int SLEEP_TIME = 1000;
 
     /**
      * RSSフィードをデータストアに登録する。
@@ -107,13 +102,13 @@ public final class NicoliveService {
     }
 
     /**
-     * {@link Nicolive}の全文検索用インデックスを作成する。
+     * {@link Nicolive}の全文検索用インデックス{@link NicoliveIndex}を作成する。
      * @param nicolive インデックスを作成するNicoliveエンティティ。
      * @throws IOException Igoの辞書ファイル読み込みに失敗した場合。
-     * @throws InterruptedException 
      * @throws NullPointerException パラメータがnullの場合。
+     * @return 登録したNicoliveIndexのキー
      */
-    public void createIndex(Nicolive nicolive) throws IOException,
+    public List<Key> createIndex(Nicolive nicolive) throws IOException,
             InterruptedException {
         if (nicolive == null) {
             throw new NullPointerException("nicolive is null.");
@@ -136,39 +131,28 @@ public final class NicoliveService {
             keywords.add(morpheme.surface);
         }
 
+        // 1キーワード1エンティティとして登録する。
+        List<NicoliveIndex> indexes = new LinkedList<NicoliveIndex>();
         NicoliveIndexMeta n = NicoliveIndexMeta.get();
         for (String keyword : keywords) {
-            NicoliveIndex nicoliveIndex =
+            int count =
                     Datastore
                         .query(n)
-                        .filter(n.keyword.equal(keyword))
-                        .asSingle();
-            if (nicoliveIndex == null) {
-                nicoliveIndex = new NicoliveIndex();
-                nicoliveIndex.setKey(Datastore.allocateId(n));
-                nicoliveIndex.setKeyword(keyword);
-                nicoliveIndex.setNicoliveKeys(new ArrayList<Key>());
-            }
-            if (!nicoliveIndex.getNicoliveKeys().contains(nicolive.getKey())) {
-                String keyString =
-                        Datastore.keyToString(nicoliveIndex.getKey());
-                // 同じエンティティを複数のTaskQueueで同時に更新できないようにする。
-                while (!Datastore.putUniqueValue(
-                    "NicoliveService#createIndex",
-                    keyString)) {
-                    Thread.sleep(SLEEP_TIME);
-                }
-                try {
-                    nicoliveIndex.getNicoliveKeys().add(nicolive.getKey());
-                    Datastore.put(nicoliveIndex);
-                } finally {
-                    Datastore.deleteUniqueValue(
-                        "NicoliveService#createIndex",
-                        keyString);
-                }
+                        .filter(
+                            n.keyword.equal(keyword),
+                            n.nicoliveKey.equal(nicolive.getKey()))
+                        .count();
+            if (count <= 0) {
+                NicoliveIndex index = new NicoliveIndex();
+                index.setKey(Datastore.allocateId(n));
+                index.setKeyword(keyword);
+                index.setNicoliveKey(nicolive.getKey());
+                DateTime now = new DateTime();
+                index.setCreatedAt(now.toDate());
+                indexes.add(index);
             }
         }
-
+        return Datastore.put(indexes);
     }
 
     /**

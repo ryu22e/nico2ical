@@ -1,13 +1,17 @@
 package org.ryu22e.nico2cal.model;
 
 import java.io.Serializable;
-import java.util.List;
+import java.util.Date;
 
 import org.slim3.datastore.Attribute;
 import org.slim3.datastore.Model;
 
 import com.google.appengine.api.datastore.Key;
 
+/**
+ * @author ryu22e
+ *
+ */
 /**
  * @author ryu22e
  *
@@ -40,7 +44,12 @@ public final class NicoliveIndex implements Serializable {
     /**
      * 
      */
-    private List<Key> nicoliveKeys;
+    private Key nicoliveKey;
+
+    /**
+     * 
+     */
+    private Date createdAt;
 
     /**
      * Returns the key.
@@ -95,17 +104,31 @@ public final class NicoliveIndex implements Serializable {
     }
 
     /**
-     * @return the nicoliveKeys
+     * @return the nicoliveKey
      */
-    public List<Key> getNicoliveKeys() {
-        return nicoliveKeys;
+    public Key getNicoliveKey() {
+        return nicoliveKey;
     }
 
     /**
-     * @param nicoliveKeys the nicoliveKeys to set
+     * @param nicoliveKey the nicoliveKey to set
      */
-    public void setNicoliveKeys(List<Key> nicoliveKeys) {
-        this.nicoliveKeys = nicoliveKeys;
+    public void setNicoliveKey(Key nicoliveKey) {
+        this.nicoliveKey = nicoliveKey;
+    }
+
+    /**
+     * @return the createdAt
+     */
+    public Date getCreatedAt() {
+        return createdAt;
+    }
+
+    /**
+     * @param createdAt the createdAt to set
+     */
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
     }
 
     @Override

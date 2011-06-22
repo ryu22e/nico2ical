@@ -59,10 +59,10 @@ public final class CalendarServiceTest extends AppEngineTestCase {
             testDataKeys.add(key);
             NicoliveIndex nicoliveIndex1 = new NicoliveIndex();
             nicoliveIndex1.setKeyword("テスト");
-            nicoliveIndex1.setNicoliveKeys(Arrays.asList(key));
+            nicoliveIndex1.setNicoliveKey(key);
             NicoliveIndex nicoliveIndex2 = new NicoliveIndex();
             nicoliveIndex2.setKeyword("説明文");
-            nicoliveIndex2.setNicoliveKeys(Arrays.asList(key));
+            nicoliveIndex2.setNicoliveKey(key);
             testDataKeys.addAll(Datastore.put(nicoliveIndex1, nicoliveIndex2));
         }
 

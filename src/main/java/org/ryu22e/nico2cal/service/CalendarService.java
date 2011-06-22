@@ -95,7 +95,7 @@ public final class CalendarService {
                             .filter(ni.keyword.in(condition.getKeywords()))
                             .asList();
                 for (NicoliveIndex nicoliveIndex : indexes) {
-                    keywordKeys.addAll(nicoliveIndex.getNicoliveKeys());
+                    keywordKeys.add(nicoliveIndex.getNicoliveKey());
                 }
             }
             for (Nicolive nicolive : nicolives) {

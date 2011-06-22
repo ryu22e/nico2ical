@@ -107,11 +107,11 @@ public class GenerateNicoliveIndexControllerTest extends ControllerTestCase {
     @Test
     public void 全文検索用インデックスを作成する() throws Exception {
         assertThat(testDataKeys.size(), not(0));
-        List<String> keys = new LinkedList<String>();
+        List<String> keysString = new LinkedList<String>();
         for (Key key : testDataKeys) {
-            keys.add(Datastore.keyToString(key));
+            keysString.add(Datastore.keyToString(key));
         }
-        tester.paramValues("keys[]", keys.toArray(new String[0]));
+        tester.paramValues("keys[]", keysString.toArray(new String[0]));
         tester.start("/GenerateNicoliveIndex");
         GenerateNicoliveIndexController controller = tester.getController();
         assertThat(controller, is(notNullValue()));
@@ -121,25 +121,31 @@ public class GenerateNicoliveIndexControllerTest extends ControllerTestCase {
 
         NicoliveIndexMeta ni = NicoliveIndexMeta.get();
 
-        NicoliveIndex index1 =
-                Datastore.query(ni).filter(ni.keyword.equal("テスト")).asSingle();
-        assertThat(index1, is(notNullValue()));
-        assertThat(
-            index1.getNicoliveKeys(),
-            hasItems(testDataKeys.toArray(new Key[0])));
+        List<NicoliveIndex> indexes1 =
+                Datastore.query(ni).filter(ni.keyword.equal("テスト")).asList();
+        assertThat(indexes1, is(notNullValue()));
+        List<Key> indexKeys1 = new LinkedList<Key>();
+        for (NicoliveIndex index1 : indexes1) {
+            indexKeys1.add(index1.getNicoliveKey());
+        }
+        assertThat(indexKeys1, hasItems(testDataKeys.toArray(new Key[0])));
 
-        NicoliveIndex index2 =
-                Datastore.query(ni).filter(ni.keyword.equal("説明")).asSingle();
-        assertThat(index2, is(notNullValue()));
-        assertThat(
-            index2.getNicoliveKeys(),
-            hasItems(testDataKeys.toArray(new Key[0])));
+        List<NicoliveIndex> indexes2 =
+                Datastore.query(ni).filter(ni.keyword.equal("説明")).asList();
+        assertThat(indexes2, is(notNullValue()));
+        List<Key> indexKeys2 = new LinkedList<Key>();
+        for (NicoliveIndex index2 : indexes2) {
+            indexKeys2.add(index2.getNicoliveKey());
+        }
+        assertThat(indexKeys2, hasItems(testDataKeys.toArray(new Key[0])));
 
-        NicoliveIndex index3 =
-                Datastore.query(ni).filter(ni.keyword.equal("文")).asSingle();
-        assertThat(index3, is(notNullValue()));
-        assertThat(
-            index3.getNicoliveKeys(),
-            hasItems(testDataKeys.toArray(new Key[0])));
+        List<NicoliveIndex> indexes3 =
+                Datastore.query(ni).filter(ni.keyword.equal("文")).asList();
+        assertThat(indexes3, is(notNullValue()));
+        List<Key> indexKeys3 = new LinkedList<Key>();
+        for (NicoliveIndex index3 : indexes3) {
+            indexKeys3.add(index3.getNicoliveKey());
+        }
+        assertThat(indexKeys3, hasItems(testDataKeys.toArray(new Key[0])));
     }
 }
