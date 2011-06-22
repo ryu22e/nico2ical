@@ -1,6 +1,7 @@
 package org.ryu22e.nico2cal.service;
 
 import java.io.IOException;
+import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
@@ -203,10 +204,18 @@ public final class NicoliveService {
     }
 
     /**
-     * {@link NicoliveIndex}を全て削除する。
+     * 古い{@link NicoliveIndex}を全て削除する。
+     * @param from この日付より前のデータを削除する。
+     * @throws NullPointerException パラメータがnullの場合。
      */
-    public void deleteAllIndex() {
+    public void deleteOldIndex(Date from) {
+        if (from == null) {
+            throw new NullPointerException("from is null.");
+        }
         NicoliveIndexMeta ni = NicoliveIndexMeta.get();
-        Datastore.delete(Datastore.query(ni).asKeyList());
+        Datastore.delete(Datastore
+            .query(ni)
+            .filter(ni.createdAt.lessThanOrEqual(from))
+            .asKeyList());
     }
 }

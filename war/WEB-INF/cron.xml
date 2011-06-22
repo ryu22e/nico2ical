@@ -6,4 +6,10 @@
     <schedule>every 1 hours</schedule>
     <timezone>Asia/Tokyo</timezone>
   </cron>
+  <cron>
+    <url>/DeleteOldNicoliveIndex</url>
+    <description>Generate Nicolive</description>
+    <schedule>every day 00:00</schedule>
+    <timezone>Asia/Tokyo</timezone>
+  </cron>
 </cronentries>

@@ -444,18 +444,40 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
     /**
      * @throws Exception
      */
-    @Test
-    public void 全文検索用インデックスを全部消す() throws Exception {
+    @Test(expected = NullPointerException.class)
+    public void 古い全文検索用インデックスを消す_パラメータがnull() throws Exception {
         assertThat(service, is(notNullValue()));
 
-        // テストデータを登録する。
-        NicoliveIndex index = new NicoliveIndex();
-        index.setKeyword("テスト");
-        Datastore.put(index);
+        service.deleteOldIndex(null);
+    }
 
-        service.deleteAllIndex();
+    /**
+     * @throws Exception
+     */
+    @Test
+    public void 古い全文検索用インデックスを消す() throws Exception {
+        assertThat(service, is(notNullValue()));
+
+        DateTime datetime = new DateTime();
+        List<NicoliveIndex> indexes = new LinkedList<NicoliveIndex>();
+        for (int i = 0; i < 50; i++) {
+            NicoliveIndex index = new NicoliveIndex();
+            index.setKeyword("テスト");
+            index.setCreatedAt(datetime.minusDays(i).toDate());
+            indexes.add(index);
+        }
+        testDataKeys.addAll(Datastore.put(indexes));
+        service.deleteOldIndex(datetime.minusDays(31).toDate());
 
         NicoliveIndexMeta ni = NicoliveIndexMeta.get();
-        assertThat(Datastore.query(ni).count(), is(0));
+        int count =
+                Datastore
+                    .query(ni)
+                    .filter(
+                        ni.createdAt.lessThanOrEqual(datetime
+                            .minusDays(31)
+                            .toDate()))
+                    .count();
+        assertThat(count, is(0));
     }
 }

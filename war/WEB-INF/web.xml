@@ -116,7 +116,7 @@
     </security-constraint>
     <security-constraint>
         <web-resource-collection>
-            <url-pattern>/GenerateFullTextSearchIndex</url-pattern>
+            <url-pattern>/GenerateNicoliveIndex</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>admin</role-name>
@@ -124,7 +124,7 @@
     </security-constraint>
     <security-constraint>
         <web-resource-collection>
-            <url-pattern>/GenerateNicoliveIndex</url-pattern>
+            <url-pattern>/DeleteOldNicoliveIndex</url-pattern>
         </web-resource-collection>
         <auth-constraint>
             <role-name>admin</role-name>
