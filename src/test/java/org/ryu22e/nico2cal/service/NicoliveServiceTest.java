@@ -308,7 +308,9 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
         assertThat(service, is(notNullValue()));
 
         SyndFeed feed = createFeed();
-        service.putNicolive(feed);
+        List<Key> keys = service.putNicolive(feed);
+        assertThat(keys, is(notNullValue()));
+        assertThat(keys.size(), is(9));
 
         DateTime datetime = new DateTime(2011, 1, 1, 0, 0, 0, 0);
         NicoliveMeta n = NicoliveMeta.get();

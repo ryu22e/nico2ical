@@ -46,8 +46,9 @@ public final class NicoliveService {
      * RSSフィードをデータストアに登録する。
      * @param feed RSSフィード
      * @throws NullPointerException パラメータがnullの場合。
+     * @return 登録したNicoliveのキー
      */
-    public void putNicolive(SyndFeed feed) {
+    public List<Key> putNicolive(SyndFeed feed) {
         if (feed == null) {
             throw new NullPointerException("feed is null.");
         }
@@ -102,7 +103,7 @@ public final class NicoliveService {
             }
         }
 
-        Datastore.put(nicolives);
+        return Datastore.put(nicolives);
     }
 
     /**
