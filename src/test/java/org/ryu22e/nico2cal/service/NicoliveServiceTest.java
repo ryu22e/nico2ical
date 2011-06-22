@@ -55,9 +55,9 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
         nicolinve.setTitle("テスト");
         nicolinve.setDescription(new Text("テスト説明文"));
         DateTime datetime = new DateTime();
-        datetime = datetime.minusDays(3);
+        datetime = datetime.minusDays(0);
         nicolinve.setOpenTime(datetime.toDate());
-        nicolinve.setLink(new Link("http://ryu22e.org/3"));
+        nicolinve.setLink(new Link("http://ryu22e.org/0"));
         Key key = Datastore.put(nicolinve);
         testDataKeys.add(key);
     }
@@ -309,13 +309,17 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
         SyndFeed feed = createFeed();
         List<Key> keys = service.put(feed);
         assertThat(keys, is(notNullValue()));
-        assertThat(keys.size(), is(9));
+        assertThat(keys.size(), is(8));
 
         DateTime datetime = new DateTime(2011, 1, 1, 0, 0, 0, 0);
         NicoliveMeta n = NicoliveMeta.get();
-        for (int i = 0; i < 9; i++) {
-            // putNicoliveでエンティティを登録する際に重複するリンクを持つエンティティがある場合は、既存のエンティティを上書き更新する。
-            // （つまり、リンクが同じエンティティが複数存在することはない。）
+        assertThat(
+            Datastore
+                .query(n)
+                .filter(n.link.equal(new Link("http://ryu22e.org/0")))
+                .count(),
+            is(1));
+        for (int i = 1; i < 9; i++) {
             int count =
                     Datastore
                         .query(n)

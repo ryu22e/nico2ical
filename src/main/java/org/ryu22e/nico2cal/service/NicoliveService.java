@@ -68,7 +68,7 @@ public final class NicoliveService {
 
             // 「nicolive:***」が取得できないエントリーは登録しない。
             if (module != null) {
-                // 重複するリンクを持つエンティティがある場合は、既存のエンティティを上書き更新する。
+                // 重複するリンクを持つエンティティがある場合は更新対象から外す。
                 Nicolive nicolive =
                         Datastore
                             .query(n)
@@ -76,26 +76,24 @@ public final class NicoliveService {
                             .asSingle();
                 if (nicolive == null) {
                     nicolive = new Nicolive();
+                    nicolive.setTitle(entry.getTitle());
+                    nicolive.setDescription(new Text(entry
+                        .getDescription()
+                        .getValue()));
+                    nicolive.setOpenTime(df
+                        .parseDateTime(module.getOpenTime())
+                        .toDate());
+                    nicolive.setStartTime(df.parseDateTime(
+                        module.getStartTime()).toDate());
+                    nicolive.setType(module.getType());
+                    nicolive.setPassword(Boolean.parseBoolean(module
+                        .getPassword()));
+                    nicolive.setPremiumOnly(Boolean.parseBoolean(module
+                        .getPremiumOnly()));
+                    nicolive.setLink(new Link(entry.getLink()));
+
+                    nicolives.add(nicolive);
                 }
-
-                nicolive.setTitle(entry.getTitle());
-                nicolive.setDescription(new Text(entry
-                    .getDescription()
-                    .getValue()));
-                nicolive.setOpenTime(df
-                    .parseDateTime(module.getOpenTime())
-                    .toDate());
-                nicolive.setStartTime(df
-                    .parseDateTime(module.getStartTime())
-                    .toDate());
-                nicolive.setType(module.getType());
-                nicolive
-                    .setPassword(Boolean.parseBoolean(module.getPassword()));
-                nicolive.setPremiumOnly(Boolean.parseBoolean(module
-                    .getPremiumOnly()));
-                nicolive.setLink(new Link(entry.getLink()));
-
-                nicolives.add(nicolive);
             }
         }
 
