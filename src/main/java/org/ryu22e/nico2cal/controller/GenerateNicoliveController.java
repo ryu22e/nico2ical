@@ -40,7 +40,7 @@ public final class GenerateNicoliveController extends Controller {
         LOGGER.info("BEGIN: " + this.getClass().getName());
 
         SyndFeed feed = nicoliveRssService.getFeed();
-        nicoliveService.putNicolive(feed);
+        nicoliveService.put(feed);
 
         LOGGER.info("END: " + this.getClass().getName());
         return null;

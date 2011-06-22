@@ -48,7 +48,7 @@ public final class NicoliveService {
      * @throws NullPointerException パラメータがnullの場合。
      * @return 登録したNicoliveのキー
      */
-    public List<Key> putNicolive(SyndFeed feed) {
+    public List<Key> put(SyndFeed feed) {
         if (feed == null) {
             throw new NullPointerException("feed is null.");
         }

@@ -146,7 +146,7 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
     public void RSSフィードをデータストアに登録する_パラメータがnull() throws Exception {
         assertThat(service, is(notNullValue()));
 
-        service.putNicolive(null);
+        service.put(null);
     }
 
     /**
@@ -308,7 +308,7 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
         assertThat(service, is(notNullValue()));
 
         SyndFeed feed = createFeed();
-        List<Key> keys = service.putNicolive(feed);
+        List<Key> keys = service.put(feed);
         assertThat(keys, is(notNullValue()));
         assertThat(keys.size(), is(9));
 
