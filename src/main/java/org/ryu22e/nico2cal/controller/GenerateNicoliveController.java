@@ -71,6 +71,7 @@ public final class GenerateNicoliveController extends Controller {
         SyndFeed feed = nicoliveRssService.getFeed();
         List<Key> keys = nicoliveService.put(feed);
         if (0 < keys.size()) {
+            LOGGER.info("Put " + keys.size() + " entities.");
             // 全文検索用インデックスを作成する。
             int fromIndex = 0;
             // 全てのデータを一つのTaskQueueに渡すと時間がかかりすぎるので、幾つかに分割する。
