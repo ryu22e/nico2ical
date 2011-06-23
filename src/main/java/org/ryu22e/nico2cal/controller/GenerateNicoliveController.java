@@ -73,17 +73,21 @@ public final class GenerateNicoliveController extends Controller {
         if (0 < keys.size()) {
             LOGGER.info("Put " + keys.size() + " entities.");
             // 全文検索用インデックスを作成する。
-            int fromIndex = 0;
-            // 全てのデータを一つのTaskQueueに渡すと時間がかかりすぎるので、幾つかに分割する。
-            while (fromIndex < keys.size()) {
-                int toIndex = fromIndex + SUBLIST_SIZE;
-                if (toIndex < keys.size()) {
-                    toIndex = keys.size() - fromIndex;
-                }
-                List<Key> subList = keys.subList(fromIndex, toIndex);
-                addTaskQueue(subList);
+            if (SUBLIST_SIZE < keys.size()) {
+                int fromIndex = 0;
+                // 全てのデータを一つのTaskQueueに渡すと時間がかかりすぎるので、幾つかに分割する。
+                while (fromIndex < keys.size()) {
+                    int toIndex = fromIndex + SUBLIST_SIZE;
+                    if (toIndex < keys.size()) {
+                        toIndex = keys.size() - fromIndex;
+                    }
+                    List<Key> subList = keys.subList(fromIndex, toIndex);
+                    addTaskQueue(subList);
 
-                fromIndex = toIndex + 1;
+                    fromIndex = toIndex + 1;
+                }
+            } else {
+                addTaskQueue(keys);
             }
         }
 
