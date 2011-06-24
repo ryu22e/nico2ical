@@ -49,7 +49,7 @@ public final class NicoliveIndex implements Serializable {
     /**
      * 
      */
-    private Date createdAt;
+    private Date openTime;
 
     /**
      * Returns the key.
@@ -118,17 +118,17 @@ public final class NicoliveIndex implements Serializable {
     }
 
     /**
-     * @return the createdAt
+     * @return the openTime
      */
-    public Date getCreatedAt() {
-        return createdAt;
+    public Date getOpenTime() {
+        return openTime;
     }
 
     /**
-     * @param createdAt the createdAt to set
+     * @param openTime the openTime to set
      */
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setOpenTime(Date openTime) {
+        this.openTime = openTime;
     }
 
     @Override

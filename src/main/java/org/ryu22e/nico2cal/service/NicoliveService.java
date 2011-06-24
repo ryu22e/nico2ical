@@ -10,7 +10,6 @@ import java.util.Set;
 import net.reduls.igo.Morpheme;
 import net.reduls.igo.Tagger;
 
-import org.joda.time.DateTime;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.ryu22e.nico2cal.meta.NicoliveIndexMeta;
@@ -142,8 +141,7 @@ public final class NicoliveService {
                 index.setKey(Datastore.allocateId(n));
                 index.setKeyword(keyword);
                 index.setNicoliveKey(nicolive.getKey());
-                DateTime now = new DateTime();
-                index.setCreatedAt(now.toDate());
+                index.setOpenTime(nicolive.getOpenTime());
                 indexes.add(index);
             }
         }
@@ -209,7 +207,7 @@ public final class NicoliveService {
         NicoliveIndexMeta ni = NicoliveIndexMeta.get();
         Datastore.delete(Datastore
             .query(ni)
-            .filter(ni.createdAt.lessThanOrEqual(from))
+            .filter(ni.openTime.lessThanOrEqual(from))
             .asKeyList());
     }
 }

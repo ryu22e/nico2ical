@@ -461,7 +461,7 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
         for (int i = 0; i < 50; i++) {
             NicoliveIndex index = new NicoliveIndex();
             index.setKeyword("テスト");
-            index.setCreatedAt(datetime.minusDays(i).toDate());
+            index.setOpenTime(datetime.minusDays(i).toDate());
             indexes.add(index);
         }
         testDataKeys.addAll(Datastore.put(indexes));
@@ -472,7 +472,7 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
                 Datastore
                     .query(ni)
                     .filter(
-                        ni.createdAt.lessThanOrEqual(datetime
+                        ni.openTime.lessThanOrEqual(datetime
                             .minusDays(31)
                             .toDate()))
                     .count();
