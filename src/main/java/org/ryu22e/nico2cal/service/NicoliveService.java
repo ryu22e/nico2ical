@@ -86,10 +86,6 @@ public final class NicoliveService {
                     nicolive.setStartTime(df.parseDateTime(
                         module.getStartTime()).toDate());
                     nicolive.setType(module.getType());
-                    nicolive.setPassword(Boolean.parseBoolean(module
-                        .getPassword()));
-                    nicolive.setPremiumOnly(Boolean.parseBoolean(module
-                        .getPremiumOnly()));
                     nicolive.setLink(new Link(entry.getLink()));
 
                     nicolives.add(nicolive);

@@ -118,8 +118,6 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
                 .plusMinutes(10)
                 .toString(df));
             module.setType("official");
-            module.setPassword("true");
-            module.setPremiumOnly("true");
             entry.getModules().add(module);
 
             entries.add(entry);
@@ -184,8 +182,6 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
         testData.setStartTime(startTime.toDate());
         testData.setLink(new Link("http://ryu22e.org/"));
         testData.setType("official");
-        testData.setPassword(true);
-        testData.setPremiumOnly(true);
 
         Key key = Datastore.put(testData);
         testDataKeys.add(key);
@@ -345,8 +341,6 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
                 .plusMinutes(10)
                 .toDate()));
             assertThat(nicolive.getType(), is("official"));
-            assertThat(nicolive.getPassword(), is(true));
-            assertThat(nicolive.getPremiumOnly(), is(true));
             assertThat(nicolive.getLink(), is(notNullValue()));
             assertThat(nicolive.getLink().getValue(), is("http://ryu22e.org/"
                     + i));

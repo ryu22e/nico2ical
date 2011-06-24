@@ -67,8 +67,6 @@ public final class NicoliveRssServiceTest extends AppEngineTestCase {
             assertThat(module.getOpenTime(), is(notNullValue()));
             assertThat(module.getStartTime(), is(notNullValue()));
             assertThat(module.getType(), is(notNullValue()));
-            assertThat(module.getPassword(), is(notNullValue()));
-            assertThat(module.getPremiumOnly(), is(notNullValue()));
         }
     }
 }

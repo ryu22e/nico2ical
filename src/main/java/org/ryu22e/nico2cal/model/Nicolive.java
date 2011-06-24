@@ -62,16 +62,6 @@ public final class Nicolive implements Serializable {
     /**
      * 
      */
-    private Boolean password;
-
-    /**
-     * 
-     */
-    private Boolean premiumOnly;
-
-    /**
-     * 
-     */
     private Link link;
 
     /**
@@ -180,34 +170,6 @@ public final class Nicolive implements Serializable {
      */
     public void setType(String type) {
         this.type = type;
-    }
-
-    /**
-     * @return the password
-     */
-    public Boolean getPassword() {
-        return password;
-    }
-
-    /**
-     * @param password the password to set
-     */
-    public void setPassword(Boolean password) {
-        this.password = password;
-    }
-
-    /**
-     * @return the premiumOnly
-     */
-    public Boolean getPremiumOnly() {
-        return premiumOnly;
-    }
-
-    /**
-     * @param premiumOnly the premiumOnly to set
-     */
-    public void setPremiumOnly(Boolean premiumOnly) {
-        this.premiumOnly = premiumOnly;
     }
 
     /**

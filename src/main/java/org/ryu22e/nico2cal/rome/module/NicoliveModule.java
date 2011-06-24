@@ -34,16 +34,6 @@ public final class NicoliveModule extends ModuleImpl {
     private String type;
 
     /**
-     * 
-     */
-    private String password;
-
-    /**
-     * 
-     */
-    private String premiumOnly;
-
-    /**
      * コンストラクタ。
      */
     public NicoliveModule() {
@@ -74,8 +64,6 @@ public final class NicoliveModule extends ModuleImpl {
         module.openTime = this.openTime;
         module.startTime = this.startTime;
         module.type = this.type;
-        module.password = this.password;
-        module.premiumOnly = this.premiumOnly;
     }
 
     /**
@@ -118,34 +106,6 @@ public final class NicoliveModule extends ModuleImpl {
      */
     public void setType(String type) {
         this.type = type;
-    }
-
-    /**
-     * @return the password
-     */
-    public String getPassword() {
-        return password;
-    }
-
-    /**
-     * @param password the password to set
-     */
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    /**
-     * @return the premium_only
-     */
-    public String getPremiumOnly() {
-        return premiumOnly;
-    }
-
-    /**
-     * @param premiumOnly the premium_only to set
-     */
-    public void setPremiumOnly(String premiumOnly) {
-        this.premiumOnly = premiumOnly;
     }
 
 }

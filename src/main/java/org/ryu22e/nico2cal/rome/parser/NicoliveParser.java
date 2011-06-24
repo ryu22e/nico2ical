@@ -42,10 +42,6 @@ public final class NicoliveParser implements ModuleParser {
         module.setStartTime(startTime.getText());
         Element type = element.getChild("type", NS);
         module.setType(type.getText());
-        Element password = element.getChild("password", NS);
-        module.setPassword(password.getText());
-        Element premiumOnly = element.getChild("premium_only", NS);
-        module.setPremiumOnly(premiumOnly.getText());
         return module;
     }
 
