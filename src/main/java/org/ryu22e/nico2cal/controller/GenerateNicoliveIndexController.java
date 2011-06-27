@@ -1,5 +1,6 @@
 package org.ryu22e.nico2cal.controller;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -10,6 +11,8 @@ import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Errors;
 import org.slim3.controller.validator.Validators;
 import org.slim3.datastore.Datastore;
+
+import com.google.appengine.api.datastore.Key;
 
 /**
  * {@link Nicolive}から全文検索用インデックスを作成するコントローラー。
@@ -57,7 +60,8 @@ public final class GenerateNicoliveIndexController extends Controller {
                 Nicolive nicolive =
                         nicoliveService.find(Datastore.stringToKey(key));
                 if (nicolive != null) {
-                    nicoliveService.createIndex(nicolive);
+                    List<Key> indexes = nicoliveService.createIndex(nicolive);
+                    LOGGER.info("Created " + indexes.size() + " indexes.");
                 }
             }
         }
