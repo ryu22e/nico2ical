@@ -478,4 +478,24 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
                     .count();
         assertThat(count, is(0));
     }
+
+    @Test
+    public void 文字列中のHTMLタグを除去する_パラメータがnull() throws Exception {
+        assertThat(service, is(notNullValue()));
+
+        assertThat(service.removeHtml(null), is(nullValue()));
+    }
+
+    /**
+     * @throws Exception
+     */
+    @Test
+    public void 文字列中のHTMLタグを除去する() throws Exception {
+        assertThat(service, is(notNullValue()));
+
+        String result =
+                service
+                    .removeHtml("<a href=\"http://ryu22e.org/\">ryu22.org</a><h1>test</h1>これはテストです。<br /> ほげほげ");
+        assertThat(result, is("ryu22.orgtestこれはテストです。 ほげほげ"));
+    }
 }

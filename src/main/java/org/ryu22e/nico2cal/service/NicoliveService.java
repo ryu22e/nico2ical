@@ -1,15 +1,25 @@
 package org.ryu22e.nico2cal.service;
 
 import java.io.IOException;
+import java.io.StringReader;
+import java.io.StringWriter;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 import net.reduls.igo.Morpheme;
 import net.reduls.igo.Tagger;
 
+import org.apache.html.dom.HTMLDocumentImpl;
+import org.apache.xerces.xni.parser.XMLDocumentFilter;
+import org.apache.xml.serialize.OutputFormat;
+import org.apache.xml.serialize.XMLSerializer;
+import org.cyberneko.html.filters.ElementRemover;
+import org.cyberneko.html.parsers.DOMFragmentParser;
 import org.joda.time.format.DateTimeFormat;
 import org.joda.time.format.DateTimeFormatter;
 import org.ryu22e.nico2cal.meta.NicoliveIndexMeta;
@@ -18,6 +28,10 @@ import org.ryu22e.nico2cal.model.Nicolive;
 import org.ryu22e.nico2cal.model.NicoliveIndex;
 import org.ryu22e.nico2cal.rome.module.NicoliveModule;
 import org.slim3.datastore.Datastore;
+import org.w3c.dom.DocumentFragment;
+import org.w3c.dom.html.HTMLDocument;
+import org.xml.sax.InputSource;
+import org.xml.sax.SAXException;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Link;
@@ -36,6 +50,12 @@ import com.sun.syndication.feed.synd.SyndFeed;
  *
  */
 public final class NicoliveService {
+
+    /**
+     * 
+     */
+    private static final Logger LOGGER = Logger.getLogger(NicoliveService.class
+        .getName());
 
     /**
      * RSSフィードをデータストアに登録する。
@@ -119,10 +139,17 @@ public final class NicoliveService {
         }
 
         // Descriptionを文節ごとに分解する。
-        List<Morpheme> descriptionMorphemes =
-                tagger.parse(nicolive.getDescription().getValue());
-        for (Morpheme morpheme : descriptionMorphemes) {
-            keywords.add(morpheme.surface);
+        try {
+            String description =
+                    removeHtml(nicolive.getDescription().getValue());
+            List<Morpheme> descriptionMorphemes = tagger.parse(description);
+            for (Morpheme morpheme : descriptionMorphemes) {
+                keywords.add(morpheme.surface);
+            }
+        } catch (SAXException e) {
+            if (LOGGER.isLoggable(Level.WARNING)) {
+                LOGGER.warning(e.getMessage());
+            }
         }
 
         // 1キーワード1エンティティとして登録する。
@@ -209,5 +236,42 @@ public final class NicoliveService {
             .query(ni)
             .filter(ni.openTime.lessThanOrEqual(from))
             .asKeyList());
+    }
+
+    /**
+     * 文字列中のHTMLタグを除去する。
+     * @param html HTMLタグを含む文字列
+     * @return HTMLタグを除去された文字列
+     * @throws IOException 
+     * @throws SAXException 
+     */
+    protected String removeHtml(String html) throws SAXException, IOException {
+        if (html == null) {
+            return null;
+        }
+
+        DOMFragmentParser parser = new DOMFragmentParser();
+
+        // フィルターの設定
+        ElementRemover remover = new ElementRemover();
+        XMLDocumentFilter[] filters = { remover };
+        parser.setProperty(
+            "http://cyberneko.org/html/properties/filters",
+            filters);
+        HTMLDocument document = new HTMLDocumentImpl();
+        DocumentFragment fragment = document.createDocumentFragment();
+
+        InputSource inputSource = new InputSource(new StringReader(html));
+        parser.parse(inputSource, fragment);
+        StringWriter writer = new StringWriter();
+        OutputFormat format = new OutputFormat();
+
+        format.setOmitXMLDeclaration(true);
+        XMLSerializer serializer = new XMLSerializer();
+        serializer.setOutputCharStream(writer);
+        serializer.setOutputFormat(format);
+        serializer.serialize(fragment);
+
+        return writer.getBuffer().toString();
     }
 }
