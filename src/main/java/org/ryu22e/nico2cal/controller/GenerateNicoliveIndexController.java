@@ -57,11 +57,19 @@ public final class GenerateNicoliveIndexController extends Controller {
         } else {
             String[] keysString = request.getParameterValues("keys[]");
             for (String key : keysString) {
-                Nicolive nicolive =
-                        nicoliveService.find(Datastore.stringToKey(key));
-                if (nicolive != null) {
-                    List<Key> indexes = nicoliveService.createIndex(nicolive);
-                    LOGGER.info("Generated " + indexes.size() + " indexes.");
+                Key nicoliveKey;
+                try {
+                    nicoliveKey = Datastore.stringToKey(key);
+                    Nicolive nicolive = nicoliveService.find(nicoliveKey);
+                    if (nicolive != null) {
+                        List<Key> indexes =
+                                nicoliveService.createIndex(nicolive);
+                        LOGGER
+                            .info("Generated " + indexes.size() + " indexes.");
+                    }
+                } catch (IllegalArgumentException e) {
+                    // 不正な値は無視して処理を続行する。
+                    LOGGER.warning(e.getMessage());
                 }
             }
         }

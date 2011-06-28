@@ -148,4 +148,54 @@ public class GenerateNicoliveIndexControllerTest extends ControllerTestCase {
         }
         assertThat(indexKeys3, hasItems(testDataKeys.toArray(new Key[0])));
     }
+
+    /**
+     * @throws Exception
+     */
+    @Test
+    public void パラメータのキーに不正が含まれている() throws Exception {
+        // 不正な値は無視して処理を続行する。
+        assertThat(testDataKeys.size(), not(0));
+        List<String> keysString = new LinkedList<String>();
+        for (Key key : testDataKeys) {
+            keysString.add(Datastore.keyToString(key));
+        }
+        keysString.add("invalid");
+        tester.paramValues("keys[]", keysString.toArray(new String[0]));
+        tester.start("/GenerateNicoliveIndex");
+        GenerateNicoliveIndexController controller = tester.getController();
+        assertThat(controller, is(notNullValue()));
+        assertThat(tester.isRedirect(), is(false));
+        assertThat(tester.response.getStatus(), is(200));
+        assertThat(tester.getDestinationPath(), is(nullValue()));
+
+        NicoliveIndexMeta ni = NicoliveIndexMeta.get();
+
+        List<NicoliveIndex> indexes1 =
+                Datastore.query(ni).filter(ni.keyword.equal("テスト")).asList();
+        assertThat(indexes1, is(notNullValue()));
+        List<Key> indexKeys1 = new LinkedList<Key>();
+        for (NicoliveIndex index1 : indexes1) {
+            indexKeys1.add(index1.getNicoliveKey());
+        }
+        assertThat(indexKeys1, hasItems(testDataKeys.toArray(new Key[0])));
+
+        List<NicoliveIndex> indexes2 =
+                Datastore.query(ni).filter(ni.keyword.equal("説明")).asList();
+        assertThat(indexes2, is(notNullValue()));
+        List<Key> indexKeys2 = new LinkedList<Key>();
+        for (NicoliveIndex index2 : indexes2) {
+            indexKeys2.add(index2.getNicoliveKey());
+        }
+        assertThat(indexKeys2, hasItems(testDataKeys.toArray(new Key[0])));
+
+        List<NicoliveIndex> indexes3 =
+                Datastore.query(ni).filter(ni.keyword.equal("文")).asList();
+        assertThat(indexes3, is(notNullValue()));
+        List<Key> indexKeys3 = new LinkedList<Key>();
+        for (NicoliveIndex index3 : indexes3) {
+            indexKeys3.add(index3.getNicoliveKey());
+        }
+        assertThat(indexKeys3, hasItems(testDataKeys.toArray(new Key[0])));
+    }
 }
