@@ -256,7 +256,7 @@ public final class CalendarControllerTest extends ControllerTestCase {
             assertThat(calendar, is(notNullValue()));
             assertThat(
                 calendar.getProperty("PRODID").getValue(),
-                is("nico2cal"));
+                is("nico2ical"));
             assertThat(calendar.getProperty("VERSION").getValue(), is("2.0"));
             assertThat(
                 calendar.getProperty("X-WR-CALNAME").getValue(),
@@ -315,7 +315,7 @@ public final class CalendarControllerTest extends ControllerTestCase {
             assertThat(calendar, is(notNullValue()));
             assertThat(
                 calendar.getProperty("PRODID").getValue(),
-                is("nico2cal"));
+                is("nico2ical"));
             assertThat(calendar.getProperty("VERSION").getValue(), is("2.0"));
             assertThat(
                 calendar.getProperty("X-WR-CALNAME").getValue(),
@@ -376,7 +376,7 @@ public final class CalendarControllerTest extends ControllerTestCase {
             assertThat(calendar, is(notNullValue()));
             assertThat(
                 calendar.getProperty("PRODID").getValue(),
-                is("nico2cal"));
+                is("nico2ical"));
             assertThat(calendar.getProperty("VERSION").getValue(), is("2.0"));
             assertThat(
                 calendar.getProperty("X-WR-CALNAME").getValue(),
@@ -437,7 +437,7 @@ public final class CalendarControllerTest extends ControllerTestCase {
             assertThat(calendar, is(notNullValue()));
             assertThat(
                 calendar.getProperty("PRODID").getValue(),
-                is("nico2cal"));
+                is("nico2ical"));
             assertThat(calendar.getProperty("VERSION").getValue(), is("2.0"));
             assertThat(
                 calendar.getProperty("X-WR-CALNAME").getValue(),
@@ -498,7 +498,7 @@ public final class CalendarControllerTest extends ControllerTestCase {
             assertThat(calendar, is(notNullValue()));
             assertThat(
                 calendar.getProperty("PRODID").getValue(),
-                is("nico2cal"));
+                is("nico2ical"));
             assertThat(calendar.getProperty("VERSION").getValue(), is("2.0"));
             assertThat(
                 calendar.getProperty("X-WR-CALNAME").getValue(),

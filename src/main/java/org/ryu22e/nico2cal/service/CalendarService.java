@@ -45,7 +45,7 @@ public final class CalendarService {
     /**
      * 
      */
-    private static final ProdId PROD_ID = new ProdId("nico2cal");
+    private static final ProdId PROD_ID = new ProdId("nico2ical");
 
     /**
      * 

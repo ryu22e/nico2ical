@@ -135,7 +135,7 @@ public final class CalendarServiceTest extends AppEngineTestCase {
 
         Calendar calendar = service.getCalendar(condition);
         assertThat(calendar, not(nullValue()));
-        assertThat(calendar.getProperty("PRODID").getValue(), is("nico2cal"));
+        assertThat(calendar.getProperty("PRODID").getValue(), is("nico2ical"));
         assertThat(calendar.getProperty("VERSION").getValue(), is("2.0"));
         assertThat(
             calendar.getProperty("X-WR-CALNAME").getValue(),
@@ -183,7 +183,7 @@ public final class CalendarServiceTest extends AppEngineTestCase {
         // データが存在しない場合でもnullにはならない。
         assertThat(calendar, not(nullValue()));
         // イベントなしのiCalendar形式データが取得される。
-        assertThat(calendar.getProperty("PRODID").getValue(), is("nico2cal"));
+        assertThat(calendar.getProperty("PRODID").getValue(), is("nico2ical"));
         assertThat(calendar.getProperty("VERSION").getValue(), is("2.0"));
         assertThat(
             calendar.getProperty("X-WR-CALNAME").getValue(),
