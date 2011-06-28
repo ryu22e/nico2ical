@@ -61,7 +61,7 @@ public final class GenerateNicoliveIndexController extends Controller {
                         nicoliveService.find(Datastore.stringToKey(key));
                 if (nicolive != null) {
                     List<Key> indexes = nicoliveService.createIndex(nicolive);
-                    LOGGER.info("Created " + indexes.size() + " indexes.");
+                    LOGGER.info("Generated " + indexes.size() + " indexes.");
                 }
             }
         }
