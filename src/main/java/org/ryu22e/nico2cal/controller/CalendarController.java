@@ -56,7 +56,7 @@ public final class CalendarController extends Controller {
             Errors errors = v.getErrors();
             StringBuilder sb = new StringBuilder();
             for (int i = 0; i < errors.size(); i++) {
-                sb.append(errors.get(i));
+                sb.append(errors.get(i) + "\n");
             }
             response.getWriter().write(new String(sb));
         } else {
