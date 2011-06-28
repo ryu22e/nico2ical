@@ -39,7 +39,7 @@ public final class DeleteOldNicoliveIndexControllerTest extends
         // テストデータを登録する。
         DateTime datetime = new DateTime();
         List<NicoliveIndex> indexes = new LinkedList<NicoliveIndex>();
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < 1500; i++) {
             NicoliveIndex index = new NicoliveIndex();
             index.setKeyword("テスト");
             index.setOpenTime(datetime.minusDays(i).toDate());
@@ -73,6 +73,8 @@ public final class DeleteOldNicoliveIndexControllerTest extends
         assertThat(tester.isRedirect(), is(false));
         assertThat(tester.response.getStatus(), is(200));
         assertThat(tester.getDestinationPath(), is(nullValue()));
+
+        // TODO あとで書く。
 
         DateTime datetime = new DateTime();
         NicoliveIndexMeta ni = NicoliveIndexMeta.get();
