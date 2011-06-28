@@ -61,18 +61,28 @@ public final class CalendarServiceTest extends AppEngineTestCase {
             nicoliveIndex1.setKeyword("テスト");
             nicoliveIndex1.setNicoliveKey(key);
             NicoliveIndex nicoliveIndex2 = new NicoliveIndex();
-            nicoliveIndex2.setKeyword("説明文");
+            nicoliveIndex2.setKeyword("説明");
             nicoliveIndex2.setNicoliveKey(key);
-            testDataKeys.addAll(Datastore.put(nicoliveIndex1, nicoliveIndex2));
+            NicoliveIndex nicoliveIndex3 = new NicoliveIndex();
+            nicoliveIndex3.setKeyword("文");
+            nicoliveIndex3.setNicoliveKey(key);
+            testDataKeys.addAll(Datastore.put(
+                nicoliveIndex1,
+                nicoliveIndex2,
+                nicoliveIndex3));
         }
 
         Nicolive nicolive = new Nicolive();
-        nicolive.setTitle("検索対象外のデータ");
-        nicolive.setDescription(new Text("検索対象外のデータ"));
+        nicolive.setTitle("テスト");
+        nicolive.setDescription(new Text("テスト"));
         DateTime datetime = new DateTime(2011, 1, 1, 0, 0, 0, 0);
         nicolive.setOpenTime(datetime.toDate());
         nicolive.setLink(new Link("http://ryu22e.org/"));
         testDataKeys.add(Datastore.put(nicolive));
+        NicoliveIndex nicoliveIndex = new NicoliveIndex();
+        nicoliveIndex.setKeyword("テスト");
+        nicoliveIndex.setNicoliveKey(nicolive.getKey());
+        testDataKeys.add(Datastore.put(nicoliveIndex));
     }
 
     /*
@@ -121,7 +131,7 @@ public final class CalendarServiceTest extends AppEngineTestCase {
         DateTime startDate = new DateTime(2011, 1, 1, 0, 0, 0, 0);
         startDate = startDate.minusDays(7);
         condition.setStartDate(startDate.toDate());
-        condition.setKeywords(Arrays.asList("テスト"));
+        condition.setKeywords(Arrays.asList("テスト", "説明"));
 
         Calendar calendar = service.getCalendar(condition);
         assertThat(calendar, not(nullValue()));

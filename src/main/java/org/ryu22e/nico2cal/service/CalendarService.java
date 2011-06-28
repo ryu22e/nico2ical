@@ -2,10 +2,8 @@ package org.ryu22e.nico2cal.service;
 
 import java.net.URI;
 import java.net.URISyntaxException;
-import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
-import java.util.Set;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.fortuna.ical4j.model.Calendar;
@@ -26,6 +24,7 @@ import org.ryu22e.nico2cal.meta.NicoliveMeta;
 import org.ryu22e.nico2cal.model.Nicolive;
 import org.ryu22e.nico2cal.model.NicoliveIndex;
 import org.slim3.datastore.Datastore;
+import org.slim3.datastore.ModelQuery;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -54,6 +53,29 @@ public final class CalendarService {
     private static final String CALNAME = "ニコニコ生放送";
 
     /**
+     * リスト1とリスト2の同じ要素をマージする。
+     * @param <T> 型名
+     * @param list1 リスト1
+     * @param list2 リスト2
+     * @return マージされたリスト
+     */
+    private <T> List<T> merge(List<T> list1, List<T> list2) {
+        List<T> merged = new LinkedList<T>();
+        if (list1.size() <= 0) {
+            merged.addAll(list2);
+        } else if (list2.size() <= 0) {
+            merged.addAll(list1);
+        } else {
+            for (T t : list1) {
+                if (list2.contains(t)) {
+                    merged.add(t);
+                }
+            }
+        }
+        return merged;
+    }
+
+    /**
      * Datastoreに登録されたRSSフィードをiCalendar形式のデータに変換する。
      * @param condition 検索条件
      * @return iCalendar形式のデータ
@@ -74,53 +96,55 @@ public final class CalendarService {
         calendar.getProperties().add(new XProperty("X-WR-CALNAME", CALNAME));
 
         NicoliveMeta n = NicoliveMeta.get();
+        NicoliveIndexMeta ni = NicoliveIndexMeta.get();
 
-        List<Nicolive> nicolives =
+        ModelQuery<Nicolive> query =
                 Datastore
                     .query(n)
                     .filter(
                         n.openTime.greaterThanOrEqual(condition.getStartDate()))
-                    .sort(n.openTime.getName(), SortDirection.ASCENDING)
-                    .asList();
+                    .sort(n.openTime.getName(), SortDirection.ASCENDING);
 
-        if (0 < nicolives.size()) {
-            Set<Key> keywordKeys = null;
-            if (condition.getKeywords() != null
-                    && 0 < condition.getKeywords().size()) {
-                keywordKeys = new HashSet<Key>();
-                NicoliveIndexMeta ni = NicoliveIndexMeta.get();
+        if (condition.getKeywords() != null
+                && 0 < condition.getKeywords().size()) {
+            List<Key> keywordKeys = new LinkedList<Key>();
+            for (String keyword : condition.getKeywords()) {
                 List<NicoliveIndex> indexes =
                         Datastore
                             .query(ni)
-                            .filter(ni.keyword.in(condition.getKeywords()))
+                            .filter(ni.keyword.equal(keyword))
                             .asList();
+                List<Key> keys = new LinkedList<Key>();
                 for (NicoliveIndex nicoliveIndex : indexes) {
-                    keywordKeys.add(nicoliveIndex.getNicoliveKey());
+                    keys.add(nicoliveIndex.getNicoliveKey());
                 }
+                keywordKeys = merge(keys, keywordKeys);
             }
-            for (Nicolive nicolive : nicolives) {
-                if (keywordKeys == null
-                        || keywordKeys.contains(nicolive.getKey())) {
-                    PropertyList properties = new PropertyList();
-                    properties.add(new Summary(nicolive.getTitle()));
-                    properties.add(new Description(nicolive
-                        .getDescription()
-                        .getValue()));
-                    properties.add(new DtStart(new DateTime(nicolive
-                        .getOpenTime())));
-                    properties.add(new DtEnd(new DateTime(nicolive
-                        .getOpenTime())));
-                    try {
-                        URI uri = new URI(nicolive.getLink().getValue());
-                        properties.add(new Url(uri));
-                    } catch (URISyntaxException e) {
-                        LOGGER.log(Level.WARNING, e.getMessage());
-                    }
+            if (0 < keywordKeys.size()) {
+                query = query.filterInMemory(n.key.in(keywordKeys));
+            } else {
+                // キーワード検索で該当するエンティティがなければ、この後のクエリを発行する必要がないので、ここで検索を終了とする。
+                return calendar;
+            }
+        }
 
-                    VEvent event = new VEvent(properties);
-                    calendar.getComponents().add(event);
-                }
+        List<Nicolive> nicolives = query.asList();
+        for (Nicolive nicolive : nicolives) {
+            PropertyList properties = new PropertyList();
+            properties.add(new Summary(nicolive.getTitle()));
+            properties
+                .add(new Description(nicolive.getDescription().getValue()));
+            properties.add(new DtStart(new DateTime(nicolive.getOpenTime())));
+            properties.add(new DtEnd(new DateTime(nicolive.getOpenTime())));
+            try {
+                URI uri = new URI(nicolive.getLink().getValue());
+                properties.add(new Url(uri));
+            } catch (URISyntaxException e) {
+                LOGGER.warning(e.getMessage());
             }
+
+            VEvent event = new VEvent(properties);
+            calendar.getComponents().add(event);
         }
 
         return calendar;
