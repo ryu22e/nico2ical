@@ -232,7 +232,7 @@ public final class NicoliveService {
             throw new NullPointerException("from is null.");
         }
         NicoliveIndexMeta ni = NicoliveIndexMeta.get();
-        Datastore.delete(Datastore
+        Datastore.deleteAsync(Datastore
             .query(ni)
             .filter(ni.openTime.lessThanOrEqual(from))
             .asKeyList());
