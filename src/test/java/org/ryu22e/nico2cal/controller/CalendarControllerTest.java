@@ -305,6 +305,9 @@ public final class CalendarControllerTest extends ControllerTestCase {
         assertThat(
             tester.response.getContentType(),
             is("text/calendar;charset=UTF-8"));
+        assertThat(
+            tester.response.getHeader("Content-Disposition"),
+            is("filename=\"nico2ical.ics\""));
         String output = tester.response.getOutputAsString();
         assertThat(output, is(notNullValue()));
         Reader reader = null;
@@ -366,6 +369,9 @@ public final class CalendarControllerTest extends ControllerTestCase {
         assertThat(
             tester.response.getContentType(),
             is("text/calendar;charset=UTF-8"));
+        assertThat(
+            tester.response.getHeader("Content-Disposition"),
+            is("filename=\"nico2ical.ics\""));
         String output = tester.response.getOutputAsString();
         assertThat(output, is(notNullValue()));
         Reader reader = null;
@@ -427,6 +433,9 @@ public final class CalendarControllerTest extends ControllerTestCase {
         assertThat(
             tester.response.getContentType(),
             is("text/calendar;charset=UTF-8"));
+        assertThat(
+            tester.response.getHeader("Content-Disposition"),
+            is("filename=\"nico2ical.ics\""));
         String output = tester.response.getOutputAsString();
         assertThat(output, is(notNullValue()));
         Reader reader = null;
@@ -488,6 +497,9 @@ public final class CalendarControllerTest extends ControllerTestCase {
         assertThat(
             tester.response.getContentType(),
             is("text/calendar;charset=UTF-8"));
+        assertThat(
+            tester.response.getHeader("Content-Disposition"),
+            is("filename=\"nico2ical.ics\""));
         String output = tester.response.getOutputAsString();
         assertThat(output, is(notNullValue()));
         Reader reader = null;

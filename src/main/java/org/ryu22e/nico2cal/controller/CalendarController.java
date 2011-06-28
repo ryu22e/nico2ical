@@ -34,6 +34,12 @@ public final class CalendarController extends Controller {
      * 
      */
     private static final int UNAUTHORIZED = 401;
+
+    /**
+     * 
+     */
+    private static final String ICALENDAR_FILE_NAME = "nico2ical.ics";
+
     /**
      * @see CalendarService
      */
@@ -73,6 +79,8 @@ public final class CalendarController extends Controller {
 
             Calendar calendar = calendarService.getCalendar(condition);
             response.setContentType("text/calendar;charset=UTF-8");
+            response.setHeader("Content-Disposition", "filename=\""
+                    + ICALENDAR_FILE_NAME + "\"");
             response.getWriter().write(calendar.toString());
         }
         response.flushBuffer();
