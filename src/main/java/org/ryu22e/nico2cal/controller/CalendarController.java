@@ -76,6 +76,10 @@ public final class CalendarController extends Controller {
             response.setContentType("text/plain;charset=UTF-8");
             response.getWriter().write(new String(sb));
         } else {
+            response.setContentType("text/calendar;charset=UTF-8");
+            response.setHeader("Content-Disposition", "filename=\""
+                    + ICALENDAR_FILE_NAME + "\"");
+
             Integer startWeekNum =
                     Integer.parseInt(request.getParameter("startWeek"));
             StartWeek startWeek = StartWeek.parse(startWeekNum);
@@ -106,9 +110,7 @@ public final class CalendarController extends Controller {
                 // キャッシュがある場合はキャッシュの内容を返す。
                 response.getWriter().write((String) cache);
             }
-            response.setContentType("text/calendar;charset=UTF-8");
-            response.setHeader("Content-Disposition", "filename=\""
-                    + ICALENDAR_FILE_NAME + "\"");
+
         }
         response.flushBuffer();
 
