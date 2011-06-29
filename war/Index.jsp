@@ -14,12 +14,12 @@
     src="/js/jquery.textchange.min.js?2011-06-29"></script>
 <script type="text/javascript" charset="UTF-8"
     src="/js/nico2ical.js?2011-06-29"></script>
-<title>nico2cal</title>
+<title>nico2ical</title>
 </head>
 <body>
-    <h1>ニコニコ生放送RSS to iCalendar</h1>
+    <h1>nico2ical</h1>
     <p>
-    <a target="_blank" href="http://live.nicovideo.jp/rss">ニコニコ生放送RSS</a>をiCalendarファイルに変換するWebサービスです。
+    nico2icalは、<a target="_blank" href="http://live.nicovideo.jp/">ニコニコ生放送</a>の公式放送日程をiCalendarファイルで配信するWebサービスです。
     </p>
     <table class="condition">
     <tbody>
