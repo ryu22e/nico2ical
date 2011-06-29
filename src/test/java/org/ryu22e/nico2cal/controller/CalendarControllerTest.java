@@ -544,4 +544,31 @@ public final class CalendarControllerTest extends ControllerTestCase {
             }
         }
     }
+
+    /**
+     * @throws Exception
+     */
+    @Test
+    public void urlルーティングのテスト_startWeekのみを指定する() throws Exception {
+        tester.start("/ical/1");
+        assertThat(tester.isRedirect(), is(false));
+        CalendarController controller = tester.getController();
+        assertThat(controller, is(notNullValue()));
+        assertThat(tester.isRedirect(), is(false));
+        assertThat(tester.response.getStatus(), is(200));
+        assertThat(tester.getDestinationPath(), is(nullValue()));
+    }
+
+    /**
+     * @throws Exception
+     */
+    @Test
+    public void urlルーティングのテスト_startWeekとkeywordを指定する() throws Exception {
+        tester.start("/ical/1/test");
+        CalendarController controller = tester.getController();
+        assertThat(controller, is(notNullValue()));
+        assertThat(tester.isRedirect(), is(false));
+        assertThat(tester.response.getStatus(), is(200));
+        assertThat(tester.getDestinationPath(), is(nullValue()));
+    }
 }
