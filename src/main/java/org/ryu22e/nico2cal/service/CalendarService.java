@@ -1,5 +1,6 @@
 package org.ryu22e.nico2cal.service;
 
+import java.io.IOException;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
@@ -23,8 +24,10 @@ import org.ryu22e.nico2cal.meta.NicoliveIndexMeta;
 import org.ryu22e.nico2cal.meta.NicoliveMeta;
 import org.ryu22e.nico2cal.model.Nicolive;
 import org.ryu22e.nico2cal.model.NicoliveIndex;
+import org.ryu22e.nico2cal.util.HtmlRemoveUtil;
 import org.slim3.datastore.Datastore;
 import org.slim3.datastore.ModelQuery;
+import org.xml.sax.SAXException;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.datastore.Query.SortDirection;
@@ -132,8 +135,18 @@ public final class CalendarService {
         for (Nicolive nicolive : nicolives) {
             PropertyList properties = new PropertyList();
             properties.add(new Summary(nicolive.getTitle()));
-            properties
-                .add(new Description(nicolive.getDescription().getValue()));
+            String description;
+            try {
+                description =
+                        HtmlRemoveUtil.removeHtml(nicolive
+                            .getDescription()
+                            .getValue());
+            } catch (SAXException e1) {
+                description = "";
+            } catch (IOException e1) {
+                description = "";
+            }
+            properties.add(new Description(description));
             properties.add(new DtStart(new DateTime(nicolive.getOpenTime())));
             properties.add(new DtEnd(new DateTime(nicolive.getOpenTime())));
             try {
