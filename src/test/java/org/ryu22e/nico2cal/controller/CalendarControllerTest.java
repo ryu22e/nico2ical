@@ -6,6 +6,7 @@ import static org.junit.Assert.*;
 import java.io.IOException;
 import java.io.Reader;
 import java.io.StringReader;
+import java.net.URLEncoder;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
@@ -23,6 +24,7 @@ import org.ryu22e.nico2cal.meta.NicoliveMeta;
 import org.ryu22e.nico2cal.model.Nicolive;
 import org.ryu22e.nico2cal.model.NicoliveIndex;
 import org.slim3.datastore.Datastore;
+import org.slim3.memcache.Memcache;
 import org.slim3.tester.ControllerTestCase;
 
 import com.google.appengine.api.NamespaceManager;
@@ -543,6 +545,73 @@ public final class CalendarControllerTest extends ControllerTestCase {
                 reader.close();
             }
         }
+    }
+
+    /**
+     * @throws Exception
+     */
+    @Test
+    public void 同じ条件で２回iCalendarファイルをダウンロードする() throws Exception {
+        String memcacheKey =
+                "startWeek=1&keyword=" + URLEncoder.encode("テスト 説明 文", "UTF-8");
+        Memcache.delete(memcacheKey);
+
+        tester.param("startWeek", 1);
+        tester.param("keyword", "テスト 説明 文");
+        tester.start("/Calendar");
+        CalendarController controller1 = tester.getController();
+        assertThat(controller1, is(notNullValue()));
+        assertThat(tester.isRedirect(), is(false));
+        assertThat(tester.response.getStatus(), is(200));
+        assertThat(tester.getDestinationPath(), is(nullValue()));
+        String output1 = tester.response.getOutputAsString();
+        Calendar calendar1 = null;
+        try {
+            Reader reader = new StringReader(output1);
+            CalendarBuilder builder = new CalendarBuilder();
+            calendar1 = builder.build(reader);
+        } catch (IOException e) {
+            fail(e.getMessage());
+        } catch (ParserException e) {
+            fail(e.getMessage());
+        }
+
+        // 取得した内容がキャッシュにも保存されている。
+        Object cache = Memcache.get(memcacheKey);
+        assertThat(output1, is(instanceOf(String.class)));
+        Calendar calendarCache = null;
+        try {
+            Reader reader = new StringReader((String) cache);
+            CalendarBuilder builder = new CalendarBuilder();
+            calendarCache = builder.build(reader);
+        } catch (IOException e) {
+            fail(e.getMessage());
+        } catch (ParserException e) {
+            fail(e.getMessage());
+        }
+        assertThat(calendar1, is(calendarCache));
+
+        // 同じ条件でもう一度コントローラーを呼ぶと、キャッシュに保存している内容を取得する。
+        tester.param("startWeek", 1);
+        tester.param("keyword", "テスト 説明 文");
+        tester.start("/Calendar");
+        CalendarController controller2 = tester.getController();
+        assertThat(controller2, is(notNullValue()));
+        assertThat(tester.isRedirect(), is(false));
+        assertThat(tester.response.getStatus(), is(200));
+        assertThat(tester.getDestinationPath(), is(nullValue()));
+        String output2 = tester.response.getOutputAsString();
+        Calendar calendar2 = null;
+        try {
+            Reader reader = new StringReader(output2);
+            CalendarBuilder builder = new CalendarBuilder();
+            calendar2 = builder.build(reader);
+        } catch (IOException e) {
+            fail(e.getMessage());
+        } catch (ParserException e) {
+            fail(e.getMessage());
+        }
+        assertThat(calendar2, is(calendarCache));
     }
 
     /**

@@ -1,5 +1,6 @@
 package org.ryu22e.nico2cal.controller;
 
+import java.net.URLEncoder;
 import java.util.Arrays;
 
 import net.fortuna.ical4j.model.Calendar;
@@ -10,6 +11,9 @@ import org.slim3.controller.Controller;
 import org.slim3.controller.Navigation;
 import org.slim3.controller.validator.Errors;
 import org.slim3.controller.validator.Validators;
+import org.slim3.memcache.Memcache;
+
+import com.google.appengine.api.memcache.Expiration;
 
 /**
  * データストアのNicoliveをiCalendarファイルを変換して取得するコントローラー。
@@ -34,6 +38,11 @@ public final class CalendarController extends Controller {
      * 
      */
     private static final int UNAUTHORIZED = 401;
+
+    /**
+     * 
+     */
+    private static final int MEMCACHE_DELTA_SECOND = 60 * 30;
 
     /**
      * 
@@ -67,22 +76,39 @@ public final class CalendarController extends Controller {
             response.setContentType("text/plain;charset=UTF-8");
             response.getWriter().write(new String(sb));
         } else {
-            StartWeek startWeek =
-                    StartWeek.parse(Integer.parseInt(request
-                        .getParameter("startWeek")));
+            Integer startWeekNum =
+                    Integer.parseInt(request.getParameter("startWeek"));
+            StartWeek startWeek = StartWeek.parse(startWeekNum);
             String keyword = request.getParameter("keyword");
-            CalendarCondition condition = new CalendarCondition();
+            String memcacheKey = "startWeek=" + startWeekNum;
             if (keyword != null) {
-                // 半角スペースで区切られているキーワードは分割して配列にする。
-                condition.setKeywords(Arrays.asList(keyword.split(" ")));
+                memcacheKey +=
+                        "&keyword=" + URLEncoder.encode(keyword, "UTF-8");
             }
-            condition.setStartDate(startWeek.toDate());
+            Object cache = Memcache.get(memcacheKey);
+            if (cache == null) {
+                CalendarCondition condition = new CalendarCondition();
+                if (keyword != null) {
+                    // 半角スペースで区切られているキーワードは分割して配列にする。
+                    condition.setKeywords(Arrays.asList(keyword.split(" ")));
+                }
+                condition.setStartDate(startWeek.toDate());
 
-            Calendar calendar = calendarService.getCalendar(condition);
+                Calendar calendar = calendarService.getCalendar(condition);
+                response.getWriter().write(calendar.toString());
+
+                // MemcacheにiCalendarの内容をキャッシュする。
+                Memcache.put(
+                    memcacheKey,
+                    calendar.toString(),
+                    Expiration.byDeltaSeconds(MEMCACHE_DELTA_SECOND));
+            } else {
+                // キャッシュがある場合はキャッシュの内容を返す。
+                response.getWriter().write((String) cache);
+            }
             response.setContentType("text/calendar;charset=UTF-8");
             response.setHeader("Content-Disposition", "filename=\""
                     + ICALENDAR_FILE_NAME + "\"");
-            response.getWriter().write(calendar.toString());
         }
         response.flushBuffer();
 
