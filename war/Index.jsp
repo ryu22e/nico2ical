@@ -4,6 +4,8 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="description" content="ニコニコ生放送RSSをiCalendarファイルに変換するWebサービスです。" />
+<meta name="keywords" content="ニコニコ生放送,iCalendar,カレンダー" />
 <link rel="shortcut icon" href="/favicon.ico" />
 <link rel="stylesheet" href="/css/global.css?2011-06-29" media="screen" />
 <script type="text/javascript" charset="UTF-8"
