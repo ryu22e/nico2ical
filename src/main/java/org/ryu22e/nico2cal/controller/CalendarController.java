@@ -13,8 +13,6 @@ import org.slim3.controller.validator.Errors;
 import org.slim3.controller.validator.Validators;
 import org.slim3.memcache.Memcache;
 
-import com.google.appengine.api.memcache.Expiration;
-
 /**
  * データストアのNicoliveをiCalendarファイルを変換して取得するコントローラー。
  * @author ryu22e
@@ -38,11 +36,6 @@ public final class CalendarController extends Controller {
      * 
      */
     private static final int UNAUTHORIZED = 401;
-
-    /**
-     * 
-     */
-    private static final int MEMCACHE_DELTA_SECOND = 60 * 30;
 
     /**
      * 
@@ -102,10 +95,7 @@ public final class CalendarController extends Controller {
                 response.getWriter().write(calendar.toString());
 
                 // MemcacheにiCalendarの内容をキャッシュする。
-                Memcache.put(
-                    memcacheKey,
-                    calendar.toString(),
-                    Expiration.byDeltaSeconds(MEMCACHE_DELTA_SECOND));
+                Memcache.put(memcacheKey, calendar.toString());
             } else {
                 // キャッシュがある場合はキャッシュの内容を返す。
                 response.getWriter().write((String) cache);
