@@ -7,6 +7,7 @@ import org.junit.Test;
 import org.ryu22e.nico2cal.meta.NicoliveIndexMeta;
 import org.ryu22e.nico2cal.meta.NicoliveMeta;
 import org.slim3.datastore.Datastore;
+import org.slim3.memcache.Memcache;
 import org.slim3.tester.ControllerTestCase;
 
 import com.google.appengine.api.NamespaceManager;
@@ -53,7 +54,7 @@ public final class GenerateNicoliveControllerTest extends ControllerTestCase {
      * @throws Exception
      */
     @Test
-    public void run() throws Exception {
+    public void nivoliveを生成する() throws Exception {
         tester.start("/GenerateNicolive");
         GenerateNicoliveController controller = tester.getController();
         assertThat(controller, is(notNullValue()));
@@ -63,5 +64,22 @@ public final class GenerateNicoliveControllerTest extends ControllerTestCase {
 
         NicoliveMeta n = NicoliveMeta.get();
         assertThat(Datastore.query(n).count(), not(0));
+    }
+
+    /**
+     * @throws Exception
+     */
+    @Test
+    public void キャッシュを削除する() throws Exception {
+        Memcache.put("test", "dummy");
+
+        tester.start("/GenerateNicolive");
+        GenerateNicoliveController controller = tester.getController();
+        assertThat(controller, is(notNullValue()));
+        assertThat(tester.isRedirect(), is(false));
+        assertThat(tester.response.getStatus(), is(200));
+        assertThat(tester.getDestinationPath(), is(nullValue()));
+
+        assertThat(Memcache.get("test"), is(nullValue()));
     }
 }

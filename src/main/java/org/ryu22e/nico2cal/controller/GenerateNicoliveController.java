@@ -8,6 +8,7 @@ import org.ryu22e.nico2cal.service.NicoliveService;
 import org.slim3.controller.Controller;
 import org.slim3.controller.Navigation;
 import org.slim3.datastore.Datastore;
+import org.slim3.memcache.Memcache;
 
 import com.google.appengine.api.datastore.Key;
 import com.google.appengine.api.taskqueue.QueueFactory;
@@ -71,6 +72,8 @@ public final class GenerateNicoliveController extends Controller {
         SyndFeed feed = nicoliveRssService.getFeed();
         List<Key> keys = nicoliveService.put(feed);
         if (0 < keys.size()) {
+            // Memcacheのキャッシュをクリアする。
+            Memcache.cleanAll();
             LOGGER.info("Generated " + keys.size() + " entities.");
             // 全文検索用インデックスを作成する。
             if (SUBLIST_SIZE < keys.size()) {
