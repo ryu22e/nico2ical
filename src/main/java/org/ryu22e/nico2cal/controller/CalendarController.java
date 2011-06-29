@@ -64,6 +64,7 @@ public final class CalendarController extends Controller {
             for (int i = 0; i < errors.size(); i++) {
                 sb.append(errors.get(i) + "\n");
             }
+            response.setContentType("text/plain;charset=UTF-8");
             response.getWriter().write(new String(sb));
         } else {
             StartWeek startWeek =
