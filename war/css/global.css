@@ -27,6 +27,10 @@ h1 {
 	color: white;
 }
 
+
+#keyword {
+	width: 52em;
+}
 #ical, #ical-webcal {
 	margin: 1em;
 }
