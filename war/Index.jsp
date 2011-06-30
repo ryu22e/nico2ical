@@ -34,7 +34,7 @@
     </tr>
     <tr>
         <td class="condition-title">キーワード（β機能）</td>
-        <td><input type="text" id="keyword" maxlength="50" /></td>
+        <td><input type="text" id="keyword" maxlength="50" /><br />スペースで区切ると複数のキーワードを指定できます。</td>
     </tr>
     </tbody>
     </table>
