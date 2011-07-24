@@ -1,8 +1,17 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
+<%@taglib prefix="f" uri="http://www.slim3.org/functions"%>
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
+<meta property="og:title" content="nico2ical" />
+<meta property="og:type" content="website" />
+<meta property="og:description" content="nico2icalは、ニコニコ生放送の公式放送日程をiCalendarファイルで配信するWebサービスです。" />
+<meta property="og:url" content="${f:h(url)}" />
+<meta property="og:image" content="${f:h(url)}image.png" />
+<meta property="og:site_name" content="nico2ical" />
+<meta property="og:email" content="ryu22e@gmail.com" />
+<meta property="fb:admins" content="ryu22e" />
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
 <meta name="description" content="ニコニコ生放送RSSをiCalendarファイルに変換するWebサービスです。" />
 <meta name="keywords" content="ニコニコ生放送,iCalendar,カレンダー" />

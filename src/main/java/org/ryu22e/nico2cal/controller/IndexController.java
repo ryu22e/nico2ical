@@ -14,6 +14,7 @@ public final class IndexController extends Controller {
      */
     @Override
     protected Navigation run() throws Exception {
+        requestScope("url", new String(request.getRequestURL()));
         return forward("Index.jsp");
     }
 
