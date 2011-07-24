@@ -12,6 +12,14 @@ h1 {
     font-family: "Times New Roman", Times, serif;
 }
 
+h1.site-title {
+	display: inline;
+}
+
+.social-buttons {
+	margin-left: 1em;
+}
+
 .condition,.condition td {
 	border: 1px gray solid; 
 	padding: 0.5em;
