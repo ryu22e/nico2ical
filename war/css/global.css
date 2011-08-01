@@ -16,8 +16,26 @@ h1.site-title {
 	display: inline;
 }
 
-.social-buttons {
-	margin-left: 1em;
+ul.social-buttons {
+    margin: 0;
+	padding: 0;
+	list-style-type: none;
+}
+
+.social-buttons>li {
+    width: 2em;
+    float: left;
+    text-align: center;
+    margin-right: 12px;
+    padding: 5px;
+} 
+
+li.separete {
+    margin-left: 65px;
+}
+
+.clearLeft {
+    clear: left;
 }
 
 .condition,.condition td {
