@@ -33,7 +33,7 @@
         <li><a href="http://twitter.com/share" class="twitter-share-button" data-url="${f:h(url)}" data-count="horizontal" data-via="ryu22e" data-lang="ja">ツイート</a><script type="text/javascript" src="http://platform.twitter.com/widgets.js"></script></li>
         <li class="separete"><g:plusone size="medium"></g:plusone></li>
         <li><a href="http://mixi.jp/share.pl" class="mixi-check-button" data-key="602111f45d53927a2df968443cf01f0850315f1d" data-url="${f:h(url)}" data-button="button-1">mixiチェック</a><script type="text/javascript" src="http://static.mixi.jp/js/share.js"></script></li>
-        <li><div id="fb-root"></div><script src="http://connect.facebook.net/en_US/all.js#appId=232314416808905&amp;xfbml=1"></script><fb:like href="${f:h(url)}" send="false" layout="button_count" width="450" show_faces="true" font="arial"></fb:like></li>
+        <li><div id="fb-root"></div><script src="http://connect.facebook.net/ja_JP/all.js#appId=232314416808905&amp;xfbml=1"></script><fb:like href="${f:h(url)}" send="false" layout="button_count" width="450" show_faces="true" font="arial"></fb:like></li>
     </ul>
     <p class="clearLeft">
     nico2icalは、<a target="_blank" href="http://live.nicovideo.jp/">ニコニコ生放送</a>の公式放送日程をiCalendarファイルで配信するWebサービスです。
