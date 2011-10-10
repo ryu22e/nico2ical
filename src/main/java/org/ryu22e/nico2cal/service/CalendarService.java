@@ -5,6 +5,7 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.logging.Logger;
 
 import net.fortuna.ical4j.model.Calendar;
@@ -27,6 +28,8 @@ import org.ryu22e.nico2cal.model.NicoliveIndex;
 import org.ryu22e.nico2cal.util.HtmlRemoveUtil;
 import org.slim3.datastore.Datastore;
 import org.slim3.datastore.ModelQuery;
+import org.slim3.util.DateUtil;
+import org.slim3.util.TimeZoneLocator;
 import org.xml.sax.SAXException;
 
 import com.google.appengine.api.datastore.Key;
@@ -131,6 +134,7 @@ public final class CalendarService {
             }
         }
 
+        TimeZone timezone = TimeZoneLocator.get();
         List<Nicolive> nicolives = query.asList();
         for (Nicolive nicolive : nicolives) {
             PropertyList properties = new PropertyList();
@@ -146,9 +150,11 @@ public final class CalendarService {
             } catch (IOException e1) {
                 description = "";
             }
+            java.util.Calendar c = DateUtil.toCalendar(nicolive.getOpenTime());
+            c.setTimeZone(timezone);
             properties.add(new Description(description));
-            properties.add(new DtStart(new DateTime(nicolive.getOpenTime())));
-            properties.add(new DtEnd(new DateTime(nicolive.getOpenTime())));
+            properties.add(new DtStart(new DateTime(c.getTime()), true));
+            properties.add(new DtEnd(new DateTime(c.getTime()), true));
             try {
                 URI uri = new URI(nicolive.getLink().getValue());
                 properties.add(new Url(uri));

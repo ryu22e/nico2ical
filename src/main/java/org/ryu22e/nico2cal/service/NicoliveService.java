@@ -1,19 +1,20 @@
 package org.ryu22e.nico2cal.service;
 
 import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Set;
+import java.util.TimeZone;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import net.reduls.igo.Morpheme;
 import net.reduls.igo.Tagger;
 
-import org.joda.time.format.DateTimeFormat;
-import org.joda.time.format.DateTimeFormatter;
 import org.ryu22e.nico2cal.meta.NicoliveIndexMeta;
 import org.ryu22e.nico2cal.meta.NicoliveMeta;
 import org.ryu22e.nico2cal.model.Nicolive;
@@ -21,6 +22,7 @@ import org.ryu22e.nico2cal.model.NicoliveIndex;
 import org.ryu22e.nico2cal.rome.module.NicoliveModule;
 import org.ryu22e.nico2cal.util.HtmlRemoveUtil;
 import org.slim3.datastore.Datastore;
+import org.slim3.util.DateUtil;
 import org.xml.sax.SAXException;
 
 import com.google.appengine.api.datastore.Key;
@@ -59,7 +61,8 @@ public final class NicoliveService {
         }
 
         NicoliveMeta n = NicoliveMeta.get();
-        DateTimeFormatter df = DateTimeFormat.forPattern("yyyy-MM-dd HH:mm:ss");
+        SimpleDateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        df.setTimeZone(TimeZone.getTimeZone("Asia/Tokyo"));
         List<Nicolive> nicolives = new LinkedList<Nicolive>();
         @SuppressWarnings("unchecked")
         List<SyndEntry> entries = (List<SyndEntry>) feed.getEntries();
@@ -89,11 +92,19 @@ public final class NicoliveService {
                     nicolive.setDescription(new Text(entry
                         .getDescription()
                         .getValue()));
-                    nicolive.setOpenTime(df
-                        .parseDateTime(module.getOpenTime())
-                        .toDate());
-                    nicolive.setStartTime(df.parseDateTime(
-                        module.getStartTime()).toDate());
+                    try {
+                        Date openTime =
+                                DateUtil.toDate(df.parse(module.getOpenTime()));
+                        nicolive.setOpenTime(openTime);
+                        Date startTime =
+                                DateUtil
+                                    .toDate(df.parse(module.getStartTime()));
+                        nicolive.setStartTime(startTime);
+                    } catch (ParseException e) {
+                        LOGGER.log(Level.WARNING, e.getMessage());
+                        continue;
+                    }
+
                     nicolive.setType(module.getType());
                     nicolive.setLink(new Link(entry.getLink()));
 

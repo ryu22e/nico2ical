@@ -307,7 +307,6 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
         assertThat(keys, is(notNullValue()));
         assertThat(keys.size(), is(8));
 
-        DateTime datetime = new DateTime(2011, 1, 1, 0, 0, 0, 0);
         NicoliveMeta n = NicoliveMeta.get();
         assertThat(
             Datastore
@@ -333,13 +332,8 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
             assertThat(nicolive.getTitle(), is("テスト" + i));
             assertThat(nicolive.getDescription(), is(notNullValue()));
             assertThat(nicolive.getDescription().getValue(), is("テスト説明" + i));
-            assertThat(nicolive.getOpenTime(), is(datetime
-                .minusDays(i)
-                .toDate()));
-            assertThat(nicolive.getStartTime(), is(datetime
-                .minusDays(i)
-                .plusMinutes(10)
-                .toDate()));
+            assertThat(nicolive.getOpenTime(), is(notNullValue()));
+            assertThat(nicolive.getStartTime(), is(notNullValue()));
             assertThat(nicolive.getType(), is("official"));
             assertThat(nicolive.getLink(), is(notNullValue()));
             assertThat(nicolive.getLink().getValue(), is("http://ryu22e.org/"
