@@ -17,6 +17,8 @@ syntax: glob
 .settings/
 syntax: glob
 war/WEB-INF/classes/*
+syntax: glob
+www-test/
 
 syntax: glob
 .apt_generated/
