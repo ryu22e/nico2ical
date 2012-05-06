@@ -74,8 +74,6 @@ public final class DeleteOldNicoliveIndexControllerTest extends
         assertThat(tester.response.getStatus(), is(200));
         assertThat(tester.getDestinationPath(), is(nullValue()));
 
-        // TODO あとで書く。
-
         DateTime datetime = new DateTime();
         NicoliveIndexMeta ni = NicoliveIndexMeta.get();
         int count =
