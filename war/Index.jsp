@@ -113,8 +113,15 @@
         </div>
       </div>
     </fieldset>
-    <a class="btn" id="ical" href="/ical/1">iCalendarファイルをダウンロード</a>
-    <a class="btn" id="ical-webcal" href="">iCalendarをダウンロード(webcal方式)</a>
+    <fieldset>
+      <legend>iCalendarファイルのダウンロード</legend>
+      <div class="control-group">
+        <div class="controls">
+          <a class="btn" id="ical" href="/ical/1">iCalendarファイルをダウンロード</a>
+          <a class="btn" id="ical-webcal" href="">iCalendarをダウンロード(webcal方式)</a>
+        </div>
+      </div>
+    </fieldset>
   </div>
   <script type="text/javascript">
     window.___gcfg = {
