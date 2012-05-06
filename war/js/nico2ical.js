@@ -3,6 +3,12 @@
  */
 
 $(function () {
+    $('.jq-placeholder').ahPlaceholder({
+        placeholderColor : 'silver',
+        placeholderAttr  : 'title',
+        likeApple        : false
+    });
+    
     var change = function() {
         var url = '/ical/' +  $("input[name='startWeeek']:checked").val();
         var keyword = $('#keyword').val();

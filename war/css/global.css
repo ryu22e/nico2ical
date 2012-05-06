@@ -1,62 +1,16 @@
 @CHARSET "utf-8";
 
 body {
-	background-color: #EEEEEE;
-	font-size: 1.2em;
-	padding: 1.5em;
+  padding-top: 60px;
+  padding-bottom: 40px;
 }
 
-h1 {
-    height: 3.3em;
-    font-size: x-large;
-    font-family: "Times New Roman", Times, serif;
+.twitter-share-button, 
+.google-plus, 
+.facebook-like {
+  margin-top: 10px;
 }
 
-h1.site-title {
-	display: inline;
-}
-
-ul.social-buttons {
-    margin: 0;
-	padding: 0;
-	list-style-type: none;
-}
-
-.social-buttons>li {
-    width: 2em;
-    float: left;
-    text-align: center;
-    margin-right: 12px;
-    padding: 5px;
-} 
-
-li.separete {
-    margin-left: 65px;
-}
-
-.clearLeft {
-    clear: left;
-}
-
-.condition,.condition td {
-	border: 1px gray solid; 
-	padding: 0.5em;
-}
-
-.condition {
-	border-collapse: collapse;
-	margin-bottom: 1em;
-}
-
-.condition-title {
-	background-color: black;
-	color: white;
-}
-
-
-#keyword {
-	width: 52em;
-}
-#ical, #ical-webcal {
-	margin: 1em;
+#ical,#ical-webcal {
+  margin: 1em;
 }
