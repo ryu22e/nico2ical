@@ -97,7 +97,7 @@
       <legend>条件の指定</legend>
       <div class="control-group">
         <div class="control-group">
-        <label class="control-label">過去分</label>
+        <label class="control-label">過去分の放送をいつまで含める？</label>
           <div class="controls">
             <label class="radio inline" for="startWeeek-1"><input type="radio" id="startWeeek-1" name="startWeeek" value="1" checked="checked" />１週間前まで</label>
             <label class="radio inline" for="startWeeek-2"><input type="radio" id="startWeeek-2" name="startWeeek" value="2" />２週間前まで</label> 
@@ -106,7 +106,7 @@
           </div>
         </div>
         <div class="control-group">
-          <label class="control-label" for="keyword">キーワード（β機能）</label>
+          <label class="control-label" for="keyword">タイトルまたは説明文に含まれるキーワード（β機能）</label>
           <div class="controls">
               <input class="input-xxlarge" type="text" id="keyword" maxlength="50" placeholder="スペースで区切ると複数のキーワードを指定できます。" />
           </div>
