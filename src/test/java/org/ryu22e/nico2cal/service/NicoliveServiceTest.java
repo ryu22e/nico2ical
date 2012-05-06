@@ -54,7 +54,7 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
         Nicolive nicolinve = new Nicolive();
         nicolinve.setTitle("テスト");
         nicolinve.setDescription(new Text("テスト説明文"));
-        DateTime datetime = new DateTime();
+        DateTime datetime = new DateTime(2012, 5, 12, 0, 0, 0, 0);
         datetime = datetime.minusDays(0);
         nicolinve.setOpenTime(datetime.toDate());
         nicolinve.setLink(new Link("http://ryu22e.org/0"));
@@ -288,7 +288,7 @@ public final class NicoliveServiceTest extends AppEngineTestCase {
         assertThat(service, is(notNullValue()));
 
         NicoliveCondition condition = new NicoliveCondition();
-        DateTime datetime = new DateTime(2011, 12, 1, 0, 0, 0, 0);
+        DateTime datetime = new DateTime(9999, 12, 1, 0, 0, 0, 0);
         condition.setStartDate(datetime.toDate());
         List<Nicolive> nicolives = service.findList(condition);
         assertThat(nicolives, is(notNullValue()));
