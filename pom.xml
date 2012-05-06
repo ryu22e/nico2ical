@@ -273,6 +273,8 @@
         <groupId>org.apache.maven.plugins</groupId>
         <artifactId>maven-eclipse-plugin</artifactId>
         <configuration>
+          <downloadSources>true</downloadSources>
+          <downloadJavadocs>true</downloadJavadocs>
           <excludes>
             <exclude>org.slim3:slim3-gen</exclude>
             <exclude>com.google.appengine:appengine-api-1.0-sdk
