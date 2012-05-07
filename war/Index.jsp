@@ -87,8 +87,8 @@
       <legend>iCalendarファイルのダウンロード</legend>
       <div class="control-group">
         <div class="controls">
-          <a class="btn" id="ical" href="/ical/1">iCalendarファイルをダウンロード</a>
-          <a class="btn" id="ical-webcal" href="">iCalendarをダウンロード(webcal方式)</a>
+          <a class="btn btn-primary" id="ical" href="/ical/1">iCalendarファイルをダウンロード</a>
+          <a class="btn btn-primary" id="ical-webcal" href="">iCalendarをダウンロード(webcal方式)</a>
         </div>
       </div>
     </fieldset>
