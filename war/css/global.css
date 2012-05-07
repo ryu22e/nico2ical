@@ -5,12 +5,7 @@ body {
   padding-bottom: 40px;
 }
 
-.twitter-share-button, 
-.google-plus, 
-.facebook-like {
+.twitter-share-button {
   margin-top: 10px;
-}
-
-#ical,#ical-webcal {
-  margin: 1em;
+  margin-left: 10px;
 }

@@ -4,77 +4,46 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
-<meta property="og:title" content="nico2ical">
-<meta property="og:type" content="website">
-<meta property="og:description"
-  content="nico2icalは、ニコニコ生放送の公式放送日程をiCalendarファイルで配信するWebサービスです。">
-<meta property="og:url" content="${f:h(url)}">
-<meta property="og:image" content="${f:h(url)}image.png">
-<meta property="og:site_name" content="nico2ical">
-<meta property="og:email" content="ryu22e@gmail.com">
-<meta property="fb:admins" content="ryu22e">
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-<meta name="description"
-  content="ニコニコ生放送RSSをiCalendarファイルに変換するWebサービスです。">
-<meta name="keywords" content="ニコニコ生放送,iCalendar,カレンダー">
+  <meta charset="utf-8">
+  <title>nico2ical</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="ニコニコ生放送RSSをiCalendarファイルに変換するWebサービスです。">
+  <meta name="keywords" content="ニコニコ生放送,iCalendar,カレンダー">
+  <meta property="og:title" content="nico2ical">
+  <meta property="og:type" content="website">
+  <meta property="og:description" content="nico2icalは、ニコニコ生放送の公式放送日程をiCalendarファイルで配信するWebサービスです。">
+  <meta property="og:url" content="${f:h(url)}">
+  <meta property="og:image" content="${f:h(url)}image.png">
+  <meta property="og:site_name" content="nico2ical">
+  <meta property="og:email" content="ryu22e@gmail.com">
+  <meta property="fb:admins" content="ryu22e">
 
-<link rel="shortcut icon" href="/favicon.ico">
+  <!-- Le styles -->
+  <link href="/assets/css/bootstrap.min.css?6094328250?5328067741" rel="stylesheet">
+  <link href="/css/global.css?2747753671" rel="stylesheet">
+  <link href="/assets/css/bootstrap-responsive.min.css" rel="stylesheet">
 
-<link rel="stylesheet" href="/assets/css/bootstrap.min.css?6094328250">
-<link rel="stylesheet" href="/css/global.css?2747753671" media="screen">
-<link rel="stylesheet"
-  href="/assets/css/bootstrap-responsive.min.css?5328067741">
-
-<!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
-<!--[if lt IE 9]>
-        <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
-    <![endif]-->
-
-<title>nico2ical</title>
+  <!-- Le HTML5 shim, for IE6-8 support of HTML5 elements -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
 </head>
 <body>
   <div class="navbar navbar-fixed-top">
     <div class="navbar-inner">
       <div class="container">
-        <a class="btn btn-navbar" data-toggle="collapse"
-          data-target=".nav-collapse"> <span class="icon-bar"></span>
+        <a class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse"> <span class="icon-bar"></span>
           <span class="icon-bar"></span> <span class="icon-bar"></span>
         </a> <a class="brand" href="/">nico2ical</a>
         <div class="nav-collapse">
           <ul class="nav">
             <li class="active"><a href="/">TOP</a></li>
             <li>
-                <a 
-                href="http://clip.livedoor.com/redirect?link=${f:h(url)}&title=nico2ical%20-%20nico2ical&ie=UTF-8" class="ldclip-redirect" title="この記事をクリップ！"><img
-                src="http://parts.blog.livedoor.jp/img/cmn/clip_16_12_b.gif"
-                width="16" height="12" alt="この記事をクリップ！"
-                style="border: none; vertical-align: middle;" /></a>
-            </li>
-            <li>
-                <a href="http://twitter.com/share"
-                class="twitter-share-button" data-url="${f:h(url)}"
-                data-count="horizontal" data-via="ryu22e" data-lang="ja">ツイート</a>
-                <script type="text/javascript"
-                  src="http://platform.twitter.com/widgets.js"></script>
-            </li>
-            <li>
-                <div class="google-plus">
-                    <g:plusone size="medium" width="250"></g:plusone>
-                </div>
-            </li>
-            <li>
-                <a href="http://mixi.jp/share.pl"
-                class="mixi-check-button"
-                data-key="602111f45d53927a2df968443cf01f0850315f1d"
-                data-url="${f:h(url)}" data-button="button-1">mixiチェック</a> <script
-                  type="text/javascript" src="http://static.mixi.jp/js/share.js"></script>
-            </li>
-            <li>
-                <div class="facebook-like">
-                  <div id="fb-root"></div>
-                  <script src="http://connect.facebook.net/ja_JP/all.js#appId=232314416808905&amp;xfbml=1"></script>
-                  <fb:like href="${f:h(url)}" send="false" layout="button_count" width="450" show_faces="true" font="arial"></fb:like>
-                </div>
+              <a href="http://twitter.com/share"
+              class="twitter-share-button" data-url="${f:h(url)}"
+              data-count="horizontal" data-via="ryu22e" data-lang="ja">ツイート</a>
+              <script type="text/javascript"
+                src="http://platform.twitter.com/widgets.js"></script>
             </li>
           </ul>
         </div>
@@ -82,6 +51,7 @@
       </div>
     </div>
   </div>
+  
   <div class="container">
     <header class="jumbotron subhead">
       <h1>nico2ical</h1>
