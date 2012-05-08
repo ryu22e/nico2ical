@@ -9,6 +9,10 @@ $(function () {
         likeApple        : false
     });
     
+    $('#logout').click(function() {
+        return confirm('ログアウトしますか？');
+    });
+    
     var change = function() {
         var url = '/ical/' +  $("input[name='startWeeek']:checked").val();
         var keyword = $('#keyword').val();

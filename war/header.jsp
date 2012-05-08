@@ -7,7 +7,7 @@
       </a> <a class="brand" href="/">nico2ical</a>
       <div class="btn-group pull-right">
         <% if (UserServiceFactory.getUserService().isUserLoggedIn()) { %>
-            
+            <a id="logout" class="btn" href="/Logout?destinationURL=/">ログアウト</a>
         <% } else { %>
             <a class="btn" href="/Login?destinationURL=/">googleアカウントでログイン</a>
         <% } %>
