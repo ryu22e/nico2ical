@@ -1,6 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-  pageEncoding="UTF-8"%>
-<%@taglib prefix="f" uri="http://www.slim3.org/functions"%>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
