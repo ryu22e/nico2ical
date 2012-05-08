@@ -3,36 +3,17 @@ package org.ryu22e.nico2cal.controller;
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
 
-import java.io.IOException;
-
-import javax.servlet.ServletException;
-import javax.servlet.http.HttpServletResponse;
-
-import org.junit.After;
-import org.junit.Before;
 import org.junit.Test;
-import org.slim3.tester.ControllerTester;
+import org.slim3.tester.ControllerTestCase;
 
-public class IndexControllerTest {
+public class IndexControllerTest extends ControllerTestCase {
 
-	@Test
-	public void test() throws NullPointerException, IllegalArgumentException,
-			IOException, ServletException {
-		tester.start("/");
-		assertThat(tester.response.getStatus(),
-				is(equalTo(HttpServletResponse.SC_OK)));
-	}
-
-	ControllerTester tester;
-
-	@Before
-	public void setUp() throws Exception {
-		tester = new ControllerTester(this.getClass());
-		tester.setUp();
-	}
-
-	@After
-	public void tearDown() throws Exception {
-		tester.tearDown();
-	}
+    @Test
+    public void run() throws Exception {
+        tester.start("/");
+        IndexController controller = tester.getController();
+        assertThat(controller, is(notNullValue()));
+        assertThat(tester.isRedirect(), is(false));
+        assertThat(tester.response.getStatus(), is(200));
+    }
 }
