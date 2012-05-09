@@ -9,3 +9,8 @@ body {
   margin-top: 10px;
   margin-left: 10px;
 }
+
+input.caldav-url {
+  cursor: auto;
+  background-color: #ffffff;
+}

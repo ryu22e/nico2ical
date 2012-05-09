@@ -9,6 +9,7 @@
 build
 eclipse.lib/*.jar
 jcoverage.ser
+src/main/resources/private/*
 target/
 war/WEB-INF/appengine-generated/local_db.bin
 war/WEB-INF/classes/*

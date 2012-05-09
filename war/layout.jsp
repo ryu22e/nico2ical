@@ -1,3 +1,4 @@
+<%@page pageEncoding="UTF-8" isELIgnored="false"%>
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -33,7 +34,12 @@
   <script src="/js/jquery-1.7.1.min.js"></script>
   <script src="/js/jquery.textchange.min.js?2011-06-29"></script>
   <script src="/js/jquery.ah-placeholder.js"></script>
+  <script src="/assets/js/jquery.cookie.js?1542280969"></script>
+  <script src="/assets/js/knockout-2.1.0.js"></script>
   <script src="/assets/js/bootstrap-collapse.js?3742199752"></script>
+  <script src="/assets/js/bootstrap-button.js?3731199092"></script>
+  <script src="/assets/js/bootstrap-tab.js?0731539092"></script>
+  <script src="/assets/js/bootstrap-alert.js?3730639092"></script>
   <script src="/js/nico2ical.js?1251950016"></script>
 </body>
 </html>

@@ -1,7 +1,25 @@
 <web-app xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://java.sun.com/xml/ns/javaee" xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
   xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd" version="2.5">
     <display-name>Archetype Created Web Application</display-name>
-  
+    
+    <servlet>
+        <servlet-name>connectGoogleApi</servlet-name>
+        <servlet-class>org.ryu22e.nico2cal.servlet.ConnectGoogleApi</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>connectGoogleApiCallback</servlet-name>
+        <servlet-class>org.ryu22e.nico2cal.servlet.ConnectGoogleApiCallback</servlet-class>
+    </servlet>
+    
+    <servlet-mapping>
+        <servlet-name>connectGoogleApi</servlet-name>
+        <url-pattern>/myCalendar/connect/*</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>connectGoogleApiCallback</servlet-name>
+        <url-pattern>/oauth2callback</url-pattern>
+    </servlet-mapping>
+    
     <context-param>
         <param-name>slim3.rootPackage</param-name>
         <param-value>org.ryu22e.nico2cal</param-value>
@@ -20,6 +38,14 @@
     </context-param>
 
     <filter>
+        <filter-name>CsrfTokenCookieFilter</filter-name>
+        <filter-class>org.ryu22e.nico2cal.filter.CsrfTokenCookieFilter</filter-class>
+    </filter>
+    <filter>
+        <filter-name>CsrfFilter</filter-name>
+        <filter-class>org.ryu22e.nico2cal.filter.CsrfFilter</filter-class>
+    </filter>
+    <filter>
         <filter-name>HotReloadingFilter</filter-name>
         <filter-class>org.slim3.controller.HotReloadingFilter</filter-class>
     </filter>
@@ -32,6 +58,17 @@
         <filter-class>org.slim3.controller.FrontController</filter-class>
     </filter>
 
+    <filter-mapping>
+        <filter-name>CsrfTokenCookieFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
+    <filter-mapping>
+        <filter-name>CsrfFilter</filter-name>
+        <url-pattern>/myCalendar/save</url-pattern>
+        <url-pattern>/myCalendar/disConnect</url-pattern>
+        <dispatcher>REQUEST</dispatcher>
+    </filter-mapping>
     <filter-mapping>
         <filter-name>HotReloadingFilter</filter-name>
         <url-pattern>/*</url-pattern>
@@ -132,6 +169,41 @@
         </web-resource-collection>
         <auth-constraint>
             <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/myCalendar/importAll</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/myCalendar/import</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>admin</role-name>
+        </auth-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/myCalendar/*</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>*</role-name>
+        </auth-constraint>
+        <user-data-constraint>
+            <transport-guarantee>CONFIDENTIAL</transport-guarantee>
+        </user-data-constraint>
+    </security-constraint>
+    <security-constraint>
+        <web-resource-collection>
+            <url-pattern>/oauth2callback</url-pattern>
+        </web-resource-collection>
+        <auth-constraint>
+            <role-name>*</role-name>
         </auth-constraint>
     </security-constraint>
     

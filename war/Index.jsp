@@ -1,3 +1,4 @@
+<%@page pageEncoding="UTF-8" isELIgnored="false"%>
 <c:import url="/layout.jsp">
   <c:param name="subTitle" value="Top"/>
   <c:param name="content">

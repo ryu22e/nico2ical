@@ -1,0 +1,3 @@
+[submodule "src/main/resources/private"]
+	path = src/main/resources/private
+	url = git@bitbucket.org:ryu22e/nico2ical-googleapi.git
