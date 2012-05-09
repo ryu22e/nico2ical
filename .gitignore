@@ -1,0 +1,17 @@
+.apt_generated/
+.checkstyle
+.classpath
+.djunitplugin
+.factorypath
+.fbprefs
+.project
+.settings/
+build
+eclipse.lib/*.jar
+jcoverage.ser
+target/
+war/WEB-INF/appengine-generated/local_db.bin
+war/WEB-INF/classes/*
+war/WEB-INF/lib/*
+!ktrwjr.jar
+www-test/
