@@ -22,11 +22,8 @@
             <li class="<c:if test="${servletPath == '/myCalendar/index.jsp'}">active</c:if>"><a href="/myCalendar/">マイカレンダー</a></li>
           <% } %>
           <li>
-            <a href="http://twitter.com/share"
-            class="twitter-share-button" data-url="${f:h(url)}"
-            data-count="horizontal" data-via="ryu22e" data-lang="ja">ツイート</a>
-            <script type="text/javascript"
-              src="http://platform.twitter.com/widgets.js"></script>
+            <a href="https://twitter.com/share" class="twitter-share-button" data-url="http://nico2ical.appspot.com/" data-text="nico2ical" data-via="ryu22e" data-lang="ja" data-hashtags="nico2ical">ツイート</a>
+<script>!function(d,s,id){var js,fjs=d.getElementsByTagName(s)[0];if(!d.getElementById(id)){js=d.createElement(s);js.id=id;js.src="//platform.twitter.com/widgets.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","twitter-wjs");</script>
           </li>
         </ul>
       </div><!--/.nav-collapse -->
