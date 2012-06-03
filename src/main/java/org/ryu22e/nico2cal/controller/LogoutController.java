@@ -21,9 +21,7 @@ public final class LogoutController extends Controller {
     @Override
     public Navigation run() throws Exception {
         UserService userService = UserServiceFactory.getUserService();
-        String destinationURL = request.getParameter("destinationURL");
-        if (!userService.isUserLoggedIn()
-                || (destinationURL == null || !destinationURL.startsWith("/"))) {
+        if (!userService.isUserLoggedIn()) {
             response.setStatus(HttpStatusConstants.FORBIDDEN);
             return null;
         } else {
@@ -31,7 +29,7 @@ public final class LogoutController extends Controller {
             if (session != null) {
                 session.invalidate();
             }
-            return redirect(userService.createLogoutURL(destinationURL));
+            return redirect(userService.createLogoutURL("/"));
         }
     }
 }

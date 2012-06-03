@@ -18,13 +18,7 @@ public final class LoginController extends Controller {
      */
     @Override
     public Navigation run() throws Exception {
-        String destinationURL = request.getParameter("destinationURL");
-        if (destinationURL == null || !destinationURL.startsWith("/")) {
-            response.setStatus(HttpStatusConstants.FORBIDDEN);
-            return null;
-        } else {
-            UserService userService = UserServiceFactory.getUserService();
-            return redirect(userService.createLoginURL(destinationURL));
-        }
+        UserService userService = UserServiceFactory.getUserService();
+        return redirect(userService.createLoginURL("/"));
     }
 }

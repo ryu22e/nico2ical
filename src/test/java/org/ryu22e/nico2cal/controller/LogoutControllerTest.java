@@ -14,22 +14,6 @@ import org.slim3.util.AppEngineUtil;
  */
 public final class LogoutControllerTest extends ControllerTestCase {
 
-    /** 
-     * @throws Exception
-     */
-    @Test
-    public void ログインした状態でログアウトする_パラメータ指定なし() throws Exception {
-        // ログアウト用URLを取得できない。
-        Assume.assumeTrue(AppEngineUtil.isServer() == false);
-        tester.param("sessionId", tester.request.getSession().getId());
-        tester.environment.setEmail("dummy@gmail.com");
-        tester.start("/Logout");
-        LogoutController controller = tester.getController();
-        assertThat(controller, is(notNullValue()));
-        assertThat(tester.isRedirect(), is(false));
-        assertThat(tester.response.getStatus(), is(403));
-    }
-
     /**
      * @throws Exception
      */
@@ -39,27 +23,12 @@ public final class LogoutControllerTest extends ControllerTestCase {
         Assume.assumeTrue(AppEngineUtil.isServer() == false);
         tester.param("sessionId", tester.request.getSession().getId());
         tester.environment.setEmail("dummy@gmail.com");
-        tester.param("destinationURL", "/dummy.html");
         tester.start("/Logout");
         LogoutController controller = tester.getController();
         assertThat(controller, is(notNullValue()));
         assertThat(tester.isRedirect(), is(true));
         assertThat(tester.response.getStatus(), is(302));
         assertThat(tester.response.getRedirectPath(), is(notNullValue()));
-    }
-
-    @Test
-    public void ログインした状態でログアウトする_パラメータが不正な値() throws Exception {
-        // ログアウト用URLを取得できない。
-        Assume.assumeTrue(AppEngineUtil.isServer() == false);
-        tester.param("sessionId", tester.request.getSession().getId());
-        tester.environment.setEmail("dummy@gmail.com");
-        tester.param("destinationURL", "http://example.com/");
-        tester.start("/Logout");
-        LogoutController controller = tester.getController();
-        assertThat(controller, is(notNullValue()));
-        assertThat(tester.isRedirect(), is(false));
-        assertThat(tester.response.getStatus(), is(403));
     }
 
     /**
@@ -69,37 +38,10 @@ public final class LogoutControllerTest extends ControllerTestCase {
     public void ログインしていない状態でログアウトする() throws Exception {
         // ログアウト用URLを取得できない。
         Assume.assumeTrue(AppEngineUtil.isServer() == false);
-        tester.param("sessionId", tester.request.getSession().getId());
-        tester.param("destinationURL", "/dummy.html");
         tester.start("/Logout");
         LogoutController controller = tester.getController();
         assertThat(controller, is(notNullValue()));
         assertThat(tester.isRedirect(), is(false));
         assertThat(tester.response.getStatus(), is(403));
     }
-
-    /**
-     * @throws Exception
-     */
-    @Test
-    public void ログインした状態でログアウトする_セッション変数に値が設定されている() throws Exception {
-        tester.request.getSession().setAttribute("test", "hello");
-
-        // ログアウト用URLを取得できる。
-        Assume.assumeTrue(AppEngineUtil.isServer() == false);
-        tester.param("sessionId", tester.request.getSession().getId());
-        tester.environment.setEmail("dummy@gmail.com");
-        tester.param("destinationURL", "/dummy.html");
-        tester.start("/Logout");
-        LogoutController controller = tester.getController();
-        assertThat(controller, is(notNullValue()));
-        assertThat(tester.isRedirect(), is(true));
-        assertThat(tester.response.getStatus(), is(302));
-        assertThat(tester.response.getRedirectPath(), is(notNullValue()));
-
-        assertThat(
-            tester.request.getSession().getAttribute("test"),
-            is(nullValue()));
-    }
-
 }

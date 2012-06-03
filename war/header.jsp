@@ -9,9 +9,9 @@
       </a> <a class="brand" href="/">nico2ical</a>
       <div class="btn-group pull-right">
         <% if (isUserLoggedIn) { %>
-            <a id="logout" class="btn" href="/Logout?destinationURL=/">ログアウト</a>
+            <a id="logout" class="btn" href="/Logout">ログアウト</a>
         <% } else { %>
-            <a class="btn" href="/Login?destinationURL=/">googleアカウントでログイン</a>
+            <a class="btn" href="/Login">googleアカウントでログイン</a>
         <% } %>
       </div>
       <div class="nav-collapse">
