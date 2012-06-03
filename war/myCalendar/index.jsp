@@ -16,7 +16,7 @@
           「マイカレンダー」で、お使いのGoogle Calendarにニコニコ生放送の放送予定日をインポートできます。
         </p>
       </header>
-      <c:if test="${!isDisabled}">
+      <c:if test="${isDisabled}">
         <div class="alert alert-block alert-error fade in">
           <a class="close" data-dismiss="alert" href="#">×</a>
           <h4 class="alert-heading">一時的にインポート機能を無効にしています</h4>
