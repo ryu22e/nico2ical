@@ -21,7 +21,7 @@ $(function () {
         if (keyword) {
             url += '/' + encodeURI(keyword);
         }
-        $('#ical').attr('href', url);
+        $('#ical').attr('href', 'http://' + location.host + url);
         $('#ical-webcal').attr('href', 'webcal://' + location.host + url);
         var host = location.host;
     };
