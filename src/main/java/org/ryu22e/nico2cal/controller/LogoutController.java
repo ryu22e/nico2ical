@@ -1,5 +1,7 @@
 package org.ryu22e.nico2cal.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.slim3.controller.Controller;
 import org.slim3.controller.Navigation;
 
@@ -25,6 +27,10 @@ public final class LogoutController extends Controller {
             response.setStatus(HttpStatusConstants.FORBIDDEN);
             return null;
         } else {
+            HttpSession session = request.getSession(false);
+            if (session != null) {
+                session.invalidate();
+            }
             return redirect(userService.createLogoutURL(destinationURL));
         }
     }
