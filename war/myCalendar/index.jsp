@@ -96,13 +96,13 @@
                   String[] str = {"aa","bb","cc"};
                   pageContext.setAttribute("data",str);
                   %>
-                    <input id="keywords" 
+                    <input id="keyword" 
                            class="input-xxlarge" 
                            type="text" 
                            maxlength="50" 
-                           data-bind="value: keywords" 
+                           data-bind="value: keyword" 
                            placeholder="スペースで区切ると複数のキーワードを指定できます。"
-                           value="${f:h(fn:join(keywords, ' '))}" />
+                           value="${f:h(keyword)}" />
                   </div><!-- /.controls -->
                 </div><!-- /.control-group -->
               </fieldset>

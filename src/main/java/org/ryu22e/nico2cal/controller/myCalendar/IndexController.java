@@ -74,9 +74,7 @@ public final class IndexController extends Controller {
             requestScope("isDisabled", myCalendar.isDisabled());
             requestScope("notifyErrorMail", myCalendar.isNotifyErrorMail());
             requestScope("calendarSummaries", myCalendar.getCalendarId());
-            requestScope(
-                "keywords",
-                myCalendar.getKeywords().toArray(new String[0]));
+            requestScope("keyword", myCalendar.getKeyword());
         }
         requestScope("storedCredential", storedCredential);
         return forward("index.jsp");

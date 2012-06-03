@@ -1,7 +1,6 @@
 package org.ryu22e.nico2cal.controller.myCalendar;
 
 import java.lang.reflect.Type;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,7 +31,7 @@ public final class SaveController extends Controller {
     /**
      * 
      */
-    public static final int KEYWORDS_MAX_LENGTH = 25;
+    private static final int KEYWORD_MAX_LENGTH = 50;
 
     /*
      * (non-Javadoc) {@inheritDoc}
@@ -40,17 +39,15 @@ public final class SaveController extends Controller {
     @Override
     public Navigation run() throws Exception {
         Validators v = new Validators(request);
-        String[] keywords = paramValues("keywords[]");
         v.add("calendarId", v.required());
+        v.add("keyword", v.maxlength(KEYWORD_MAX_LENGTH));
         v.add("notifyErrorMail", v.required());
-        if (!v.validate()
-                || (keywords != null && KEYWORDS_MAX_LENGTH < keywords.length)) {
+        if (!v.validate()) {
             response.setStatus(HttpStatusConstants.FORBIDDEN);
             return null;
         }
         MyCalendar myCalendar = new MyCalendar();
         BeanUtil.copy(request, myCalendar);
-        myCalendar.setKeywords(Arrays.asList(paramValues("keywords[]")));
         myCalendar.setDisabled(false);
         calendarService.putMyCalendar(myCalendar);
 

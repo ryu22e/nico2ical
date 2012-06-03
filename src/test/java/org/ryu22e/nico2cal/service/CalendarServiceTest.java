@@ -2,7 +2,6 @@ package org.ryu22e.nico2cal.service;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import static org.junit.matchers.JUnitMatchers.*;
 import static org.mockito.Mockito.*;
 
 import java.io.IOException;
@@ -320,7 +319,7 @@ public final class CalendarServiceTest extends AppEngineTestCase {
         tester.environment.setEmail("dummy@gmail.com");
         MyCalendar myCalendar = new MyCalendar();
         myCalendar.setCalendarId("test1");
-        myCalendar.setKeywords(Arrays.asList("keyword1", "keyword2"));
+        myCalendar.setKeyword("keyword1 keyword2");
         Key key = service.putMyCalendar(myCalendar);
         MyCalendar storedMyCalendar =
                 Datastore.getOrNull(MyCalendar.class, key);
@@ -345,12 +344,7 @@ public final class CalendarServiceTest extends AppEngineTestCase {
 
         MyCalendar myCalendar = new MyCalendar();
         myCalendar.setCalendarId("test2");
-        myCalendar.setKeywords(Arrays.asList(
-            "keyword1",
-            "keyword2",
-            "keyword3",
-            "keyword3",
-            ""));
+        myCalendar.setKeyword("keyword1 keyword2 keyword3 keyword4");
         Key key = service.putMyCalendar(myCalendar);
         MyCalendar storedMyCalendar =
                 Datastore.getOrNull(MyCalendar.class, key);
@@ -358,8 +352,8 @@ public final class CalendarServiceTest extends AppEngineTestCase {
         assertThat(storedMyCalendar.getKey(), is(testDataKey));
         assertThat(storedMyCalendar.getCalendarId(), is("test2"));
         assertThat(
-            storedMyCalendar.getKeywords(),
-            hasItems("keyword1", "keyword2", "keyword3"));
+            storedMyCalendar.getKeyword(),
+            is("keyword1 keyword2 keyword3 keyword4"));
     }
 
     /**
@@ -679,5 +673,13 @@ public final class CalendarServiceTest extends AppEngineTestCase {
             is("Google Calendarへのインポートに失敗しました"));
         assertThat(mailMessage.getTextBody(), is(notNullValue()));
         assertThat(mailMessage.getTextBody(), not(""));
+    }
+
+    @Test
+    public void testname() throws Exception {
+        String keyword = "a b c";
+        for (String s : Arrays.asList(keyword.split(" "))) {
+            System.out.println(s);
+        }
     }
 }

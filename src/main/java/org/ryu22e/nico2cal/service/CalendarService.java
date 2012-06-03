@@ -6,13 +6,12 @@ import java.io.StringWriter;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
 import java.util.TimeZone;
 import java.util.logging.Logger;
 
@@ -323,20 +322,6 @@ public class CalendarService {
     }
 
     /**
-     * @param keywords
-     * @return
-     */
-    private List<String> generateKeywords(List<String> keywords) {
-        Set<String> set = new HashSet<String>();
-        for (String keyword : keywords) {
-            if (!"".equals(keyword)) {
-                set.add(keyword);
-            }
-        }
-        return new ArrayList<String>(set);
-    }
-
-    /**
      * 連携対象のGoogle Calendarを登録する。
      * @param myCalendar {@link MyCalendar}
      * @return 登録後のKey
@@ -372,7 +357,6 @@ public class CalendarService {
             options.exclude("key", "user");
             BeanUtil.copy(myCalendar, entity, options);
         }
-        entity.setKeywords(generateKeywords(entity.getKeywords()));
         return Datastore.put(entity);
     }
 
@@ -444,9 +428,12 @@ public class CalendarService {
             ModelQuery<Nicolive> query =
                     Datastore.query(n).filter(
                         n.openTime.greaterThanOrEqual(d.toDate()));
-            if (0 < myCalendar.getKeywords().size()) {
+            if (myCalendar.getKeyword() != null
+                    && 0 < myCalendar.getKeyword().length()) {
                 List<Key> keywordKeys =
-                        getKeywordKeys(myCalendar.getKeywords());
+                        getKeywordKeys(Arrays.asList(myCalendar
+                            .getKeyword()
+                            .split(" ")));
                 if (0 < keywordKeys.size()) {
                     query = query.filterInMemory(n.key.in(keywordKeys));
                 } else {

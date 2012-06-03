@@ -43,7 +43,7 @@ $(function () {
         var self = this;
         this.selectedValue = ko.observable(params.selectedValue);
         this.notifyErrorMail = ko.observable(params.notifyErrorMail);
-        this.keywords = ko.observable(params.keywords);
+        this.keyword = ko.observable(params.keyword);
         this.isSaveSuccess = ko.observable(false);
         this.isSavaError = ko.observable(false);
         this.isDisconnectError = ko.observable(false);
@@ -65,7 +65,7 @@ $(function () {
                         data: {
                             'csrftoken': $.cookie('csrftoken'),
                             'notifyErrorMail': self.notifyErrorMail(),
-                            'keywords': self.keywords().split(' '),
+                            'keyword': self.keyword(),
                             'calendarId': self.selectedValue()
                             }
                     }
@@ -111,7 +111,7 @@ $(function () {
             {
                 'selectedValue': $('input[name=calendarSummaries]:checked').val() || '',
                 'notifyErrorMail': $('#notify-error-email').is(':checked'),
-                'keywords': $('#keywords').val()
+                'keyword': $('#keyword').val()
                 }
             )
     );

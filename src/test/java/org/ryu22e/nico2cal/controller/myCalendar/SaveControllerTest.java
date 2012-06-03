@@ -2,7 +2,6 @@ package org.ryu22e.nico2cal.controller.myCalendar;
 
 import static org.hamcrest.CoreMatchers.*;
 import static org.junit.Assert.*;
-import static org.junit.matchers.JUnitMatchers.*;
 
 import java.lang.reflect.Type;
 import java.util.Map;
@@ -50,9 +49,7 @@ public final class SaveControllerTest extends ControllerTestCase {
         tester.request.setMethod("POST");
         tester.param("calendarId", "test1");
         tester.param("notifyErrorMail", "true");
-        tester.paramValues(
-            "keywords[]",
-            new String[] { "keyword1", "keyword2" });
+        tester.param("keyword", "keyword1 keyword2");
         tester.start("/myCalendar/save");
         SaveController controller = tester.getController();
         assertThat(controller, is(notNullValue()));
@@ -75,7 +72,7 @@ public final class SaveControllerTest extends ControllerTestCase {
         assertThat(myCalendar, is(notNullValue()));
         assertThat(myCalendar.getCalendarId(), is("test1"));
         assertThat(myCalendar.isNotifyErrorMail(), is(true));
-        assertThat(myCalendar.getKeywords(), is(notNullValue()));
-        assertThat(myCalendar.getKeywords(), hasItems("keyword1", "keyword2"));
+        assertThat(myCalendar.getKeyword(), is(notNullValue()));
+        assertThat(myCalendar.getKeyword(), is("keyword1 keyword2"));
     }
 }

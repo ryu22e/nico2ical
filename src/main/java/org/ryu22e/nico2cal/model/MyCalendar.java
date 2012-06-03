@@ -1,7 +1,6 @@
 package org.ryu22e.nico2cal.model;
 
 import java.io.Serializable;
-import java.util.List;
 
 import org.slim3.datastore.Attribute;
 import org.slim3.datastore.Model;
@@ -51,7 +50,7 @@ public final class MyCalendar implements Serializable {
     /**
      * 
      */
-    private List<String> keywords;
+    private String keyword;
 
     /**
      * 
@@ -139,17 +138,17 @@ public final class MyCalendar implements Serializable {
     }
 
     /**
-     * @return the keywords
+     * @return the keyword
      */
-    public List<String> getKeywords() {
-        return keywords;
+    public String getKeyword() {
+        return keyword;
     }
 
     /**
-     * @param keywords the keywords to set
+     * @param keyword the keyword to set
      */
-    public void setKeywords(List<String> keywords) {
-        this.keywords = keywords;
+    public void setKeyword(String keyword) {
+        this.keyword = keyword;
     }
 
     /**
