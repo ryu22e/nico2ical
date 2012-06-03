@@ -1,5 +1,7 @@
 package org.ryu22e.nico2cal.controller;
 
+import javax.servlet.http.HttpSession;
+
 import org.slim3.controller.Controller;
 import org.slim3.controller.Navigation;
 
@@ -18,6 +20,10 @@ public final class LoginController extends Controller {
      */
     @Override
     public Navigation run() throws Exception {
+        HttpSession session = request.getSession(false);
+        if (session != null) {
+            session.invalidate();
+        }
         UserService userService = UserServiceFactory.getUserService();
         return redirect(userService.createLoginURL("/"));
     }

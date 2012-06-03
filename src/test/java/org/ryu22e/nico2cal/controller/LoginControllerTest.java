@@ -27,4 +27,20 @@ public final class LoginControllerTest extends ControllerTestCase {
         assertThat(tester.response.getStatus(), is(302));
         assertThat(tester.response.getRedirectPath(), is(notNullValue()));
     }
+
+    /**
+     * @throws Exception
+     */
+    @Test
+    public void セッション変数に値が設定されている状態でログインするとセッション変数の値がクリアされる() throws Exception {
+        Assume.assumeTrue(AppEngineUtil.isServer() == false);
+        tester.sessionScope("test", "this is test.");
+        tester.start("/Login");
+        LoginController controller = tester.getController();
+        assertThat(controller, is(notNullValue()));
+        assertThat(tester.isRedirect(), is(true));
+        assertThat(tester.response.getStatus(), is(302));
+        assertThat(tester.response.getRedirectPath(), is(notNullValue()));
+        assertThat(tester.sessionScope("test"), is(nullValue()));
+    }
 }
