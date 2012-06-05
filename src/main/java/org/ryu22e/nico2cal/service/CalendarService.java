@@ -469,7 +469,7 @@ public class CalendarService {
                     // カレンダーのDescriptionに生放送のURLと説明文を設定する。
                     try {
                         event.setDescription(nicolive.getLink().getValue()
-                                + "¥n"
+                                + " "
                                 + HtmlRemoveUtil.removeHtml(nicolive
                                     .getDescription()
                                     .getValue()));
