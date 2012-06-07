@@ -520,9 +520,12 @@ public class CalendarService {
                     importedNicoliveKeys.add(nicolive.getKey());
                 }
             }
-            // 今回インポート対象にした範囲のNicoliveをMyCalendarLogに記録して、次回のインポート対象から外すようにする。
-            myCalendarLog.setNicoliveKeys(allNicoliveKeys);
-            Datastore.putAsync(myCalendarLog);
+            if (0 < allNicoliveKeys.size()
+                    && !myCalendarLog.getNicoliveKeys().equals(allNicoliveKeys)) {
+                // 今回インポート対象にした範囲のNicoliveをMyCalendarLogに記録して、次回のインポート対象から外すようにする。
+                myCalendarLog.setNicoliveKeys(allNicoliveKeys);
+                Datastore.putAsync(myCalendarLog);
+            }
         }
     }
 }
