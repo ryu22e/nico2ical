@@ -674,12 +674,4 @@ public final class CalendarServiceTest extends AppEngineTestCase {
         assertThat(mailMessage.getTextBody(), is(notNullValue()));
         assertThat(mailMessage.getTextBody(), not(""));
     }
-
-    @Test
-    public void testname() throws Exception {
-        String keyword = "a b c";
-        for (String s : Arrays.asList(keyword.split(" "))) {
-            System.out.println(s);
-        }
-    }
 }
