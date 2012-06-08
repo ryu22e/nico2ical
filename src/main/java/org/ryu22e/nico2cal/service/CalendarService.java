@@ -525,6 +525,7 @@ public class CalendarService {
                 // 今回インポート対象にした範囲のNicoliveをMyCalendarLogに記録して、次回のインポート対象から外すようにする。
                 myCalendarLog.setNicoliveKeys(allNicoliveKeys);
                 Datastore.putAsync(myCalendarLog);
+                LOGGER.info("MyCalendarLog is saved");
             }
         }
     }
