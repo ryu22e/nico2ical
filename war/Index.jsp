@@ -9,7 +9,7 @@
           nico2icalは、<a target="_blank" href="http://live.nicovideo.jp/">ニコニコ生放送</a>の公式放送日程をiCalendarファイルで配信するWebサービスです。
         </p>
         <p>
-          ご意見、ご要望は<a target="_blank" href="https://twitter.com/ryu22e">https://twitter.com/ryu22e</a>、またはメールアドレス（ryu22e[at]gmail.com）まで。
+           普段お使いのカレンダーアプリ（Macの<a target="_blank" href="http://www.apple.com/jp/support/ical/">iCal</a>、<a target="_blank" href ="https://addons.mozilla.org/ja/thunderbird/addon/lightning/">Thunderbird/Lighting</a>等）で快適なニコ生ライフを満喫できますよ！
         </p>
       </header>
       

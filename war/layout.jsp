@@ -29,6 +29,7 @@
 <body>
   <c:import url="/header.jsp"/>
   
+  <div class="container">
   ${param.content}
   
   <script src="/js/jquery-1.7.1.min.js"></script>
@@ -41,5 +42,7 @@
   <script src="/assets/js/bootstrap-tab.js?0731539092"></script>
   <script src="/assets/js/bootstrap-alert.js?3730639092"></script>
   <script src="/js/nico2ical.js?1251950016"></script>
+  <c:import url="/footer.jsp"/>
+  </div>
 </body>
 </html>
