@@ -15,7 +15,7 @@
   <cron>
     <url>/myCalendar/importAll</url>
     <description>Import Nicolive to Google Calendar</description>
-    <schedule>every 1 hours</schedule>
+    <schedule>every 12 hours</schedule>
     <timezone>Asia/Tokyo</timezone>
   </cron>
 </cronentries>
