@@ -32,6 +32,7 @@
   <div class="container">
   ${param.content}
   
+  <c:import url="/footer.jsp"/>
   <script src="/assets/js/jquery-1.7.1.min.js"></script>
   <script src="/assets/js/jquery.textchange.min.js?2011-06-29"></script>
   <script src="/assets/js/jquery.ah-placeholder.js"></script>
@@ -42,7 +43,6 @@
   <script src="/assets/js/bootstrap-tab.js?0731539092"></script>
   <script src="/assets/js/bootstrap-alert.js?3730639092"></script>
   <script src="/js/nico2ical.js?1251950016"></script>
-  <c:import url="/footer.jsp"/>
   </div>
 </body>
 </html>
