@@ -32,9 +32,9 @@
   <div class="container">
   ${param.content}
   
-  <script src="/js/jquery-1.7.1.min.js"></script>
-  <script src="/js/jquery.textchange.min.js?2011-06-29"></script>
-  <script src="/js/jquery.ah-placeholder.js"></script>
+  <script src="/assets/js/jquery-1.7.1.min.js"></script>
+  <script src="/assets/js/jquery.textchange.min.js?2011-06-29"></script>
+  <script src="/assets/js/jquery.ah-placeholder.js"></script>
   <script src="/assets/js/jquery.cookie.js?1542280969"></script>
   <script src="/assets/js/knockout-2.1.0.js"></script>
   <script src="/assets/js/bootstrap-collapse.js?3742199752"></script>
